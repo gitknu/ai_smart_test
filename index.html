@@ -23,10 +23,11 @@
         header {
             background: grey;
             color: white;
-            padding: 3rem 0;
+            padding: 4rem 0;
             min-height: 100px;
             display: flex;
-            align-items: center;
+            align-items: flex-start; 
+            padding-top: 0.1rem;
         }
 
         .header-container {
@@ -40,7 +41,7 @@
             display: flex;
             align-items: flex-end;
             position: relative;
-            height: 150px; /* Increased height for logo section */
+            height: 150px;
         }
 
         .main-letters {
@@ -57,7 +58,7 @@
 
         .science-letter {
             font-weight: 900;
-            font-size: 9rem; /* Increased font size */
+            font-size: 9rem;
             color: #b80000;
             line-height: 0.7;
             text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
@@ -111,27 +112,27 @@
             }
             
             .logo-group {
-                height: 120px; /* Adjusted height for smaller screens */
+                height: 120px; 
             }
         }
 
         @media (max-width: 480px) {
             .science-letter, .science-ience {
-                font-size: 4.5rem; /* Adjusted font size for smaller screens */
+                font-size: 4.5rem; 
             }
             
             .subscript {
-                font-size: 1.2rem; /* Adjusted font size for smaller screens */
-                bottom: -2.5rem; /* Adjusted negative margin */
+                font-size: 1.2rem; 
+                bottom: -2.5rem; /* negative margin */
             }
             
             .logo-group {
-                height: 90px; /* Adjusted height for smaller screens */
+                height: 90px;
             }
         }
         model-viewer {
-            width: 150px; 
-            height: 150px; 
+            width: 250px; 
+            height: 250px; 
             margin-left: 1px;
         }
     </style>
