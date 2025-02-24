@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        header {
+            background: grey;
+            color: white;
+            padding: 3rem 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+            height: 100px; /* Base height for logo section */
+        }
+
+        .main-letters {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .letter-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .science-letter {
+            font-weight: 900;
+            font-size: 6rem;
+            color: #b80000;
+            line-height: 0.7;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        .science-ience {
+            font-weight: 800;
+            font-size: 6rem;
+            color: black;
+            line-height: 0.7;
+        }
+
+        .subscript {
+            font-weight: 100;
+            font-size: 1.2rem;
+            color: #b80000;
+            position: absolute;
+            bottom: -1.7rem; /* Negative margin */
+            white-space: nowrap;
+        }
+
+        .mart {
+            left: 0;
+        }
+
+        .ities {
+            right: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        footer {
+            background: black;
+            color: white;
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .science-letter, .science-ience {
+                font-size: 4rem;
+            }
+            
+            .subscript {
+                font-size: 1rem;
+                bottom: -1.7rem; /* negative margin */
+            }
+            
+            .logo-group {
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .science-letter, .science-ience {
+                font-size: 3rem;
+            }
+            
+            .subscript {
+                font-size: 0.8rem;
+                bottom: -1.7rem; /* negative margin */
+            }
+            
+            .logo-group {
+                height: 60px;
+            }
+        }
+
+        /* Model Viewer Styles */
+        model-viewer {
+            width: 100px; /* Adjust size as needed */
+            height: 100px; /* Adjust size as needed */
+            margin-left: 10px; /* Space between "Science" and the model */
+        }
+    </style>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-container">
+                <div class="logo-group">
+                    <div class="main-letters">
+                        <div class="letter-container">
+                            <div class="science-letter">S</div>
+                            <div class="subscript mart">mart</div>
+                        </div>
+                        <div class="letter-container">
+                            <div class="science-letter">C</div>
+                            <div class="subscript ities">ities'</div>
+                        </div>
+                    </div>
+                    <div class="science-ience">ience</div>
+                    <!-- 3D Model Viewer -->
+                    <model-viewer 
+                        src="path/to/your/model.glb" 
+                        alt="A 3D model" 
+                        auto-rotate 
+                        camera-controls
+                        style="width: 100px; height: 100px;">
+                    </model-viewer>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <p class="description">
+                This is a brief description section below the header. Add your introductory text here. 
+                The layout will automatically adjust to any screen size while maintaining readability 
+                and visual appeal.
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Your Website. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
