@@ -92,6 +92,22 @@
             padding: 1.5rem;
             margin-top: auto;
         }
+        .close-chat-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .close-chat-button:hover {
+            color: #ccc;
+        }
         .chat-container {
             position: fixed;
             bottom: 20px;
@@ -318,6 +334,7 @@
     <div class="chat-container">
         <div class="chat-header">
             АІ - чат
+            <button class="close-chat-button">×</button>
         </div>
         <div class="chat-history" id="chatHistory">
             <div class="message bot">
@@ -339,7 +356,7 @@
         "Sorry, I don't know the answer on this question",
         "Our project ",
         "Програмування на JavaScript та Python",
-        "Перепрошую, як не знаю відповідь на це питання",
+        "Перепрошую, я не знаю відповідь на це питання",
         "A walk in the forest during autumn",
         "Сонячний день у Карпатах"
     ];
@@ -439,16 +456,21 @@
     }
 
     initializeEmbeddings();
-
     document.getElementById('inputText').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessage();
     });
 
     document.querySelector('.chat-toggle-button').addEventListener('click', function() {
         const chat = document.querySelector('.chat-container');
-        const isChatVisible = chat.style.display === 'flex';
-        chat.style.display = isChatVisible ? 'none' : 'flex';
-        this.style.display = isChatVisible ? 'flex' : 'none'; // Hide the button when chat is open
+        chat.style.display = 'flex';
+        this.style.display = 'none';
+    });
+
+    document.querySelector('.close-chat-button').addEventListener('click', function() {
+        const chat = document.querySelector('.chat-container');
+        const toggleButton = document.querySelector('.chat-toggle-button');
+        chat.style.display = 'none';
+        toggleButton.style.display = 'flex';
     });
 
     // Handle window resize to ensure button and chat are positioned correctly
