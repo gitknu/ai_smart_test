@@ -443,13 +443,12 @@
     document.getElementById('inputText').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessage();
     });
-    document.getElementById('inputText').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage();
-    });
 
     document.querySelector('.chat-toggle-button').addEventListener('click', function() {
         const chat = document.querySelector('.chat-container');
-        chat.style.display = chat.style.display === 'none' ? 'flex' : 'none';
+        const isChatVisible = chat.style.display === 'flex';
+        chat.style.display = isChatVisible ? 'none' : 'flex';
+        this.style.display = isChatVisible ? 'flex' : 'none'; 
     });
 </script>
 </body>
