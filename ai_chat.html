@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multilingual Text Matcher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+        }
+        .chat-header {
+            background-color: #202123;
+            color: #fff;
+            padding: 15px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .chat-history {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .message.user {
+            align-items: flex-end;
+        }
+        .message.bot {
+            align-items: flex-start;
+        }
+        .message-text {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            word-wrap: break-word;
+        }
+        .message.user .message-text {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .message.bot .message-text {
+            background-color: #e5e5e5;
+            color: #000;
+        }
+        .chat-input-container {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #e5e5e5;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #e5e5e5;
+            border-radius: 5px;
+            outline: none;
+        }
+        .chat-input:focus {
+            border-color: #007bff;
+        }
+        .send-button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .send-button:hover {
+            background-color: #0056b3;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            АІ - чат
+        </div>
+        <div class="chat-history" id="chatHistory">
+            <div class="message bot">
+                <div class="message-text">Є питання, але не готові писати нам?</div>
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="inputText" placeholder="Напишіть Ваш запит...">
+            <button class="send-button" onclick="sendMessage()">Відправити</button>
+            <div class="loader" id="loader"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0"></script>
+    <script>
+        let pipe = null;
+        const answers = [
+            "The quick brown fox jumps over the lazy dog", // English
+            "A sunny day at the park with friends", // English
+            "Програмування на JavaScript та Python", // Ukrainian
+            "Машинне навчання з нейронними мережами", // Ukrainian
+            "A walk in the forest during autumn", // English
+            "Сонячний день у Карпатах" // Ukrainian
+        ];
+
+        async function initializeEmbeddings() {
+            const loader = document.getElementById('loader');
+            loader.style.display = 'inline-block';
+            
+            const { pipeline } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0');
+            
+            // Load embeddings model
+            pipe = await pipeline('feature-extraction', 'Xenova/paraphrase-multilingual-MiniLM-L12-v2', {
+                quantized: true,
+                backend: 'cpu',
+            });
+            
+            loader.style.display = 'none';
+            addBotMessage("Можете уточнити в ШІ - асистента! 🧠");
+        }
+
+        async function getEmbedding(text) {
+            const output = await pipe(text, { pooling: 'mean', normalize: true });
+            return Array.from(output.data);
+        }
+
+        function cosineSimilarity(a, b) {
+            const dot = a.reduce((sum, val, i) => sum + val * b[i], 0);
+            const magA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+            const magB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+            return dot / (magA * magB);
+        }
+
+        async function findBestMatch(inputText) {
+            if (!pipe) {
+                alert('Embeddings still loading...');
+                return;
+            }
+
+            const loader = document.getElementById('loader');
+            loader.style.display = 'inline-block';
+            
+            try {
+                // Get embedding for input text
+                const inputEmbedding = await getEmbedding(inputText);
+                let bestScore = -1;
+                let bestAnswer = '';
+                
+                // Compare with all answers
+                for (const answer of answers) {
+                    const answerEmbedding = await getEmbedding(answer);
+                    const score = cosineSimilarity(inputEmbedding, answerEmbedding);
+                    
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestAnswer = answer;
+                    }
+                }
+                
+                addBotMessage(`Best Match: ${bestAnswer}\nSimilarity Score: ${bestScore.toFixed(3)}`);
+            } catch (error) {
+                console.error(error);
+                addBotMessage("Sorry, I encountered an error while processing your request.");
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        function addUserMessage(text) {
+            const chatHistory = document.getElementById('chatHistory');
+            const message = document.createElement('div');
+            message.classList.add('message', 'user');
+            message.innerHTML = `<div class="message-text">${text}</div>`;
+            chatHistory.appendChild(message);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function addBotMessage(text) {
+            const chatHistory = document.getElementById('chatHistory');
+            const message = document.createElement('div');
+            message.classList.add('message', 'bot');
+            message.innerHTML = `<div class="message-text">${text}</div>`;
+            chatHistory.appendChild(message);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function sendMessage() {
+            const inputText = document.getElementById('inputText').value.trim();
+            if (!inputText) return;
+
+            addUserMessage(inputText);
+            document.getElementById('inputText').value = '';
+            findBestMatch(inputText);
+        }
+
+        // Initialize embeddings when page loads
+        initializeEmbeddings();
+        
+        // Handle Enter key in input field
+        document.getElementById('inputText').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
