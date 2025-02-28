@@ -466,10 +466,20 @@
         findBestMatch(inputText);
     }
 
-    initializeEmbeddings();
-    document.getElementById('inputText').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage();
-    });
+document.querySelector('.chat-toggle-button').addEventListener('click', async function() {
+    if (!pipe) {
+        this.textContent = '⌛';
+        await initializeEmbeddings();
+        const chat = document.querySelector('.chat-container');
+        const toggleButton = document.querySelector('.chat-toggle-button');
+        chat.style.display = 'flex';
+        toggleButton.style.display = 'none';
+    } else {
+        const chat = document.querySelector('.chat-container');
+        chat.style.display = 'flex';
+        this.style.display = 'none';
+    }
+});
 
     document.querySelector('.chat-toggle-button').addEventListener('click', function() {
         const chat = document.querySelector('.chat-container');
