@@ -13,11 +13,6 @@
             box-sizing: border-box;
             font-family: 'Montserrat', sans-serif;
         }
-                model-viewer {
-            width: 250px; 
-            height: 250px; 
-            margin-left: 1px;
-        }
         body {
             min-height: 100vh;
             display: flex;
@@ -35,7 +30,6 @@
             display: flex;
             align-items: flex-start; 
             padding-top: 0.1rem;
-            width:100%;
         }
         .header-container {
             display: flex;
@@ -97,7 +91,6 @@
             color: white;
             padding: 1.5rem;
             margin-top: auto;
-            width:100%;
         }
         .close-chat-button {
             position: absolute;
@@ -140,7 +133,7 @@
             color: white;
             border: none;
             cursor: pointer;
-            font-size: 55px;
+            font-size: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -298,6 +291,11 @@
                 bottom: 20px;
                 right: 20px;
             }
+        model-viewer {
+            width: 250px; 
+            height: 250px; 
+            margin-left: 1px;
+        }
 }
     </style>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
@@ -351,9 +349,6 @@
             <div class="message bot">
                 <div class="message-text">Є питання, але не готові писати нам?</div>
             </div>
-            <div class="message bot" id="initLoader" style="display: none;">
-                <div class="message-text"><div class="loader"></div></div>
-            </div>
         </div>
         <div class="chat-input-container">
             <input type="text" class="chat-input" id="inputText" placeholder="Напишіть Ваш запит...">
@@ -361,8 +356,9 @@
         </div>
     </div>
     <button class="chat-toggle-button">🧠</button>
-    <script>
+<script>
     let pipe = null;
+    let embeddingsLoading = false;
     const answers = [
         "Sorry, I don't know the answer on this question",
         "Our project ",
@@ -373,22 +369,52 @@
     ];
 
     async function initializeEmbeddings() {
-        const initLoader = document.createElement('div');
-        initLoader.classList.add('message', 'bot');
-        initLoader.innerHTML = `<div class="message-text"><div class="loader"></div></div>`;
-        document.getElementById('chatHistory').appendChild(initLoader);
-        const loader = initLoader.querySelector('.loader');
-        loader.style.display = 'inline-block';
-
+        embeddingsLoading = true;
         const { pipeline } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0');
         pipe = await pipeline('feature-extraction', 'Xenova/paraphrase-multilingual-MiniLM-L12-v2', {
             quantized: true,
             backend: 'cpu',
         });
-
-        initLoader.remove();
+        embeddingsLoading = false;
         addBotMessage("Можете уточнити в ШІ - асистента! 🧠");
+        openChat();
     }
+
+    function openChat() {
+        const chat = document.querySelector('.chat-container');
+        const toggleButton = document.querySelector('.chat-toggle-button');
+        chat.style.display = 'flex';
+        toggleButton.style.display = 'none';
+    }
+
+    document.querySelector('.chat-toggle-button').addEventListener('click', function() {
+        if (!pipe && !embeddingsLoading) {
+            initializeEmbeddings();
+        } else if (pipe) {
+            openChat();
+        }
+    });
+
+    document.querySelector('.close-chat-button').addEventListener('click', function() {
+        const chat = document.querySelector('.chat-container');
+        const toggleButton = document.querySelector('.chat-toggle-button');
+        chat.style.display = 'none';
+        toggleButton.style.display = 'flex';
+    });
+
+    document.getElementById('inputText').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    window.addEventListener('resize', function() {
+        const chat = document.querySelector('.chat-container');
+        const toggleButton = document.querySelector('.chat-toggle-button');
+        if (chat.style.display === 'flex') {
+            toggleButton.style.display = 'none';
+        } else {
+            toggleButton.style.display = 'flex';
+        }
+    });
 
     async function getEmbedding(text) {
         const output = await pipe(text, { pooling: 'mean', normalize: true });
@@ -430,7 +456,7 @@
                     bestAnswer = answer;
                 }
             }
-            addBotMessage(`${bestAnswer}<!-- ${bestScore.toFixed(3)}-->`);
+            addBotMessage(`${bestAnswer}`);
         } catch (error) {
             console.error(error);
             addBotMessage("Sorry, I encountered an error while processing your request.");
@@ -465,45 +491,6 @@
         document.getElementById('inputText').value = '';
         findBestMatch(inputText);
     }
-
-document.querySelector('.chat-toggle-button').addEventListener('click', async function() {
-    if (!pipe) {
-        this.textContent = '⌛';
-        await initializeEmbeddings();
-        const chat = document.querySelector('.chat-container');
-        const toggleButton = document.querySelector('.chat-toggle-button');
-        chat.style.display = 'flex';
-        toggleButton.style.display = 'none';
-    } else {
-        const chat = document.querySelector('.chat-container');
-        chat.style.display = 'flex';
-        this.style.display = 'none';
-    }
-});
-
-    document.querySelector('.chat-toggle-button').addEventListener('click', function() {
-        const chat = document.querySelector('.chat-container');
-        chat.style.display = 'flex';
-        this.style.display = 'none';
-    });
-
-    document.querySelector('.close-chat-button').addEventListener('click', function() {
-        const chat = document.querySelector('.chat-container');
-        const toggleButton = document.querySelector('.chat-toggle-button');
-        chat.style.display = 'none';
-        toggleButton.style.display = 'flex';
-    });
-
-    // Handle window resize to ensure button and chat are positioned correctly
-    window.addEventListener('resize', function() {
-        const chat = document.querySelector('.chat-container');
-        const toggleButton = document.querySelector('.chat-toggle-button');
-        if (chat.style.display === 'flex') {
-            toggleButton.style.display = 'none';
-        } else {
-            toggleButton.style.display = 'flex';
-        }
-    });
 </script>
 </body>
 </html>
