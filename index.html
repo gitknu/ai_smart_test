@@ -452,42 +452,53 @@ document.querySelector('.chat-toggle-button').addEventListener('click', function
         return dot / (magA * magB);
     }
 
-    async function findBestMatch(inputText) {
-        if (!pipe) {
-            alert('Embeddings still loading...');
-            return;
-        }
+ function calculatePauseDuration(inputText) {
+    const length = inputText.length;
+    const pauseDuration = Math.min((length / 15) * 1000, 3000); // Max 3 seconds
+    return pauseDuration;
+}
 
-        const loader = document.createElement('div');
-        loader.className = 'loader';
-        const loadingMessage = document.createElement('div');
-        loadingMessage.classList.add('message', 'bot');
-        loadingMessage.innerHTML = `<div class="message-text"></div>`;
-        loadingMessage.querySelector('.message-text').appendChild(loader);
-        document.getElementById('chatHistory').appendChild(loadingMessage);
-        loader.style.display = 'inline-block';
-
-        try {
-            const inputEmbedding = await getEmbedding(inputText);
-            let bestScore = -1;
-            let bestAnswer = '';
-            for (const answer of answers) {
-                const answerEmbedding = await getEmbedding(answer);
-                const score = cosineSimilarity(inputEmbedding, answerEmbedding);
-
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestAnswer = answer;
-                }
-            }
-            addBotMessage(`${bestAnswer}`);
-        } catch (error) {
-            console.error(error);
-            addBotMessage("Sorry, I encountered an error while processing your request.");
-        } finally {
-            loadingMessage.remove();
-        }
+async function findBestMatch(inputText) {
+    if (!pipe) {
+        alert('Embeddings still loading...');
+        return;
     }
+
+    const loader = document.createElement('div');
+    loader.className = 'loader';
+    const loadingMessage = document.createElement('div');
+    loadingMessage.classList.add('message', 'bot');
+    loadingMessage.innerHTML = `<div class="message-text"></div>`;
+    loadingMessage.querySelector('.message-text').appendChild(loader);
+    document.getElementById('chatHistory').appendChild(loadingMessage);
+    loader.style.display = 'inline-block';
+
+    try {
+        const inputEmbedding = await getEmbedding(inputText);
+        let bestScore = -1;
+        let bestAnswer = '';
+        for (const answer of answers) {
+            const answerEmbedding = await getEmbedding(answer);
+            const score = cosineSimilarity(inputEmbedding, answerEmbedding);
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestAnswer = answer;
+            }
+        }
+
+        // Add pause before displaying the answer
+        const pauseDuration = calculatePauseDuration(inputText);
+        await new Promise(resolve => setTimeout(resolve, pauseDuration));
+
+        addBotMessage(`${bestAnswer}`);
+    } catch (error) {
+        console.error(error);
+        addBotMessage("Sorry, I encountered an error while processing your request.");
+    } finally {
+        loadingMessage.remove();
+    }
+}
 
     function addUserMessage(text) {
         const chatHistory = document.getElementById('chatHistory');
@@ -498,14 +509,27 @@ document.querySelector('.chat-toggle-button').addEventListener('click', function
         chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 
-    function addBotMessage(text) {
-        const chatHistory = document.getElementById('chatHistory');
-        const message = document.createElement('div');
-        message.classList.add('message', 'bot');
-        message.innerHTML = `<div class="message-text">${text}</div>`;
-        chatHistory.appendChild(message);
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-    }
+function typeMessage(text, messageElement, delay = 50) {
+    let index = 0;
+    const interval = setInterval(() => {
+        if (index < text.length) {
+            messageElement.querySelector('.message-text').textContent += text[index];
+            index++;
+        } else {
+            clearInterval(interval);
+        }
+    }, delay);
+}
+
+function addBotMessage(text) {
+    const chatHistory = document.getElementById('chatHistory');
+    const message = document.createElement('div');
+    message.classList.add('message', 'bot');
+    message.innerHTML = `<div class="message-text"></div>`;
+    chatHistory.appendChild(message);
+    typeMessage(text, message);
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
 
     function sendMessage() {
         const inputText = document.getElementById('inputText').value.trim();
