@@ -387,13 +387,38 @@
         toggleButton.style.display = 'none';
     }
 
-    document.querySelector('.chat-toggle-button').addEventListener('click', function() {
-        if (!pipe && !embeddingsLoading) {
-            initializeEmbeddings();
-        } else if (pipe) {
-            openChat();
-        }
-    });
+let animationInterval = null;
+
+function startEllipsisAnimation() {
+    const frames = ['.', '..', '...'];
+    let currentFrame = 0;
+    const button = document.querySelector('.chat-toggle-button');
+    button.textContent = frames[currentFrame];
+    animationInterval = setInterval(() => {
+        currentFrame = (currentFrame + 1) % frames.length;
+        button.textContent = frames[currentFrame];
+    }, 500);
+}
+
+function stopEllipsisAnimation() {
+    if (animationInterval) {
+        clearInterval(animationInterval);
+        animationInterval = null;
+    }
+    const button = document.querySelector('.chat-toggle-button');
+    button.textContent = '🧠';
+}
+
+document.querySelector('.chat-toggle-button').addEventListener('click', function() {
+    if (!pipe && !embeddingsLoading) {
+        startEllipsisAnimation();
+        initializeEmbeddings().finally(() => {
+            stopEllipsisAnimation();
+        });
+    } else if (pipe) {
+        openChat();
+    }
+});
 
     document.querySelector('.close-chat-button').addEventListener('click', function() {
         const chat = document.querySelector('.chat-container');
