@@ -359,19 +359,14 @@
 <script>
     let pipe = null;
     let embeddingsLoading = false;
-    let answers = []; // Now using let instead of const
-
-    // Initialize answers after DOM loads
+    let answers = []; 
     document.addEventListener('DOMContentLoaded', () => {
-        // 1. Add original static answers
         const staticAnswers = [
             "I'm sorry, I don't know the answer or didn't understand the question",
-            "Програмування на JavaScript та Python",
             "Перепрошую, я не знаю відповідь або не зрозумів питання",
-            "Сонячний день у Карпатах"
+            "My work is based on embeddings. With their help, I find the most appropriate answer and address it to you",
+            "В основі моєї роботи лежать ембедінги (embeddings). Із їх допомогою я знаходжу найбільш підходящу відповідь та адресую її Вам"
         ];
-
-        // 2. Add webpage answers
         const webpageAnswers = Array.from(document.querySelectorAll('.answer'))
             .map(el => {
                 const text = el.textContent.trim();
@@ -379,13 +374,9 @@
                 return text;
             })
             .filter(text => text.length > 0);
-
-        // 3. Combine both sources
         answers = [...staticAnswers, ...webpageAnswers];
-        console.log('Final answers array:', answers); // Debugging log
+        console.log('Final answers array:', answers); 
     });
-
-    // REST OF YOUR ORIGINAL CODE BELOW - NO CHANGES NEEDED
     async function initializeEmbeddings() {
         embeddingsLoading = true;
         const { pipeline } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0');
@@ -396,16 +387,13 @@
         embeddingsLoading = false;
         openChat();
     }
-
     function openChat() {
         const chat = document.querySelector('.chat-container');
         const toggleButton = document.querySelector('.chat-toggle-button');
         chat.style.display = 'flex';
         toggleButton.style.display = 'none';
     }
-
 let animationInterval = null;
-
 function startEllipsisAnimation() {
     const frames = ['.', '..', '...'];
     let currentFrame = 0;
