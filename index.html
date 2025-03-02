@@ -493,7 +493,55 @@ document.querySelector('.chat-toggle-button').addEventListener('click', function
     const pauseDuration = Math.min((length / 15) * 1000, 3000); 
     return pauseDuration;
 }
+ function calculatePauseDuration(inputText) {
+    const length = inputText.length;
+    const pauseDuration = Math.min((length / 15) * 1000, 3000); 
+    return pauseDuration;
+}
+function checkForSevenChars(inputText) {
+    const sequenceRegex = /(.)\1{6}/;
+    const sequenceMatch = inputText.match(sequenceRegex);
+    if (sequenceMatch) {
+        return sequenceMatch[0];
+    }
+    if (inputText.length >= 7) {
+        let bestMatch = null;
+        let maxLength = 0;
+        for (const answer of answers) {
+            let longestMatch = '';
+            let currentMatch = '';
+            for (let i = 0; i < inputText.length; i++) {
+                for (let j = 0; j < answer.length; j++) {
+                    let k = 0;
+                    while (i + k < inputText.length && 
+                           j + k < answer.length && 
+                           inputText[i + k] === answer[j + k]) {
+                        currentMatch += inputText[i + k];
+                        k++;
+                    }
+                    if (currentMatch.length > longestMatch.length) {
+                        longestMatch = currentMatch;
+                    }
+                    currentMatch = '';
+                }
+            }
+            if (longestMatch.length >= 7 && longestMatch.length > maxLength) {
+                maxLength = longestMatch.length;
+                bestMatch = answer;
+            }
+        }
+        return bestMatch;
+    }
+    return null;
+}
 async function findBestMatch(inputText) {
+    const directMatch = checkForSevenChars(inputText);
+    if (directMatch) {
+        const pauseDuration = calculatePauseDuration(inputText);
+        await new Promise(resolve => setTimeout(resolve, pauseDuration));
+        addBotMessage(directMatch);
+        return;
+    }
     if (!pipe) {
         alert('Embeddings still loading...');
         return;
@@ -513,7 +561,6 @@ async function findBestMatch(inputText) {
         for (const answer of answers) {
             const answerEmbedding = await getEmbedding(answer);
             const score = cosineSimilarity(inputEmbedding, answerEmbedding);
-
             if (score > bestScore) {
                 bestScore = score;
                 bestAnswer = answer;
@@ -524,7 +571,7 @@ async function findBestMatch(inputText) {
         addBotMessage(`${bestAnswer}`);
     } catch (error) {
         console.error(error);
-        addBotMessage("Sorry, I encountered an error while processing your request.");
+        addBotMessage("Помилка!");
     } finally {
         loadingMessage.remove();
     }
