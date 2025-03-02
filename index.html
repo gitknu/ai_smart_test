@@ -417,144 +417,242 @@ header {
     </svg>
 </button>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const staticAnswers = [
-        "I'm sorry, I don't know...", 
-        "Перепрошую, я не знаю...",
-        "My work is based on embeddings...",
-        "В основі моєї роботи лежать ембедінги..."
-    ];
-    answers = [
-        ...staticAnswers,
-        ...Array.from(document.querySelectorAll('.answer'))
-            .map(el => el.textContent.trim())
-            .filter(text => text)
-    ];
-});
-let pipe = null, embeddingsLoading = false, animationInterval = null;
-const initializeEmbeddings = async () => {
-    embeddingsLoading = true;
-    ({ pipeline } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0'));
-    pipe = await pipeline('feature-extraction', 'Xenova/paraphrase-multilingual-MiniLM-L12-v2', {
-        quantized: true,
-        backend: 'cpu',
+    let pipe = null;
+    let embeddingsLoading = false;
+    let answers = []; 
+    document.addEventListener('DOMContentLoaded', () => {
+        const staticAnswers = [
+            "I'm sorry, I don't know the answer or didn't understand the question",
+            "Перепрошую, я не знаю відповідь або не зрозумів питання",
+            "My work is based on embeddings. With their help, I find the most appropriate answer and address it to you",
+            "В основі моєї роботи лежать ембедінги (embeddings). Із їх допомогою я знаходжу найбільш підходящу відповідь та адресую її Вам"
+        ];
+        const webpageAnswers = Array.from(document.querySelectorAll('.answer'))
+            .map(el => {
+                const text = el.textContent.trim();
+                return text;
+            })
+            .filter(text => text.length > 0);
+        answers = [...staticAnswers, ...webpageAnswers];
+        console.log('Final answers array:', answers); 
     });
-    embeddingsLoading = false;
-    openChat();
-};
-const chatUI = {
-    toggle: document.querySelector('.chat-toggle-button'),
-    container: document.querySelector('.chat-container'),
-    open: () => {
-        chatUI.container.style.display = 'flex';
-        chatUI.toggle.style.display = 'none';
-    },
-    close: () => {
-        chatUI.container.style.display = 'none';
-        chatUI.toggle.style.display = 'flex';
+    async function initializeEmbeddings() {
+        embeddingsLoading = true;
+        const { pipeline } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0');
+        pipe = await pipeline('feature-extraction', 'Xenova/paraphrase-multilingual-MiniLM-L12-v2', {
+            quantized: true,
+            backend: 'cpu',
+        });
+        embeddingsLoading = false;
+        openChat();
     }
-};
-const animateButton = {
-    start: () => {
-        const frames = ['.', '..', '...'];
-        let currentFrame = 0;
-        chatUI.toggle.innerHTML = frames[currentFrame];
-        animationInterval = setInterval(() => {
-            currentFrame = (currentFrame + 1) % frames.length;
-            chatUI.toggle.textContent = frames[currentFrame];
-        }, 500);
-    },
-    stop: () => {
+    function openChat() {
+        const chat = document.querySelector('.chat-container');
+        const toggleButton = document.querySelector('.chat-toggle-button');
+        chat.style.display = 'flex';
+        toggleButton.style.display = 'none';
+    }
+let animationInterval = null;
+function startEllipsisAnimation() {
+    const frames = ['.', '..', '...'];
+    let currentFrame = 0;
+    const button = document.querySelector('.chat-toggle-button');
+    button.innerHTML = frames[currentFrame];
+    animationInterval = setInterval(() => {
+        currentFrame = (currentFrame + 1) % frames.length;
+        button.textContent = frames[currentFrame];
+    }, 500);
+}
+function stopEllipsisAnimation() {
+    if (animationInterval) {
         clearInterval(animationInterval);
-        chatUI.toggle.innerHTML = `
-            <svg class="button-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM9.29 16.29 5.7 12.7a.9959.9959 0 0 1 0-1.41c.39-.39 1.02-.39 1.41 0L10 14.17l6.88-6.88c.39-.39 1.02-.39 1.41 0 .39.39.39 1.02 0 1.41l-7.59 7.59c-.38.39-1.02.39-1.41 0z"/>
-            </svg>`;
+        animationInterval = null;
     }
-};
-chatUI.toggle.addEventListener('click', () => {
+    const button = document.querySelector('.chat-toggle-button');
+     button.innerHTML = `
+        <svg class="button-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM9.29 16.29 5.7 12.7a.9959.9959 0 0 1 0-1.41c.39-.39 1.02-.39 1.41 0L10 14.17l6.88-6.88c.39-.39 1.02-.39 1.41 0 .39.39.39 1.02 0 1.41l-7.59 7.59c-.38.39-1.02.39-1.41 0z"/>
+        </svg>
+    `;
+}
+document.querySelector('.chat-toggle-button').addEventListener('click', function() {
     if (!pipe && !embeddingsLoading) {
-        animateButton.start();
-        initializeEmbeddings().finally(animateButton.stop);
-    } else if (pipe) chatUI.open();
-});
-document.querySelector('.close-chat-button').addEventListener('click', chatUI.close);
-const messageHandler = {
-    add: (text, isUser = true) => {
-        const message = document.createElement('div');
-        message.classList.add('message', isUser ? 'user' : 'bot');
-        message.innerHTML = `<div class="message-text">${isUser ? text : ''}</div>`;
-        document.getElementById('chatHistory').appendChild(message);
-        
-        if (!isUser) this.type(text, message);
-        message.scrollIntoView({ behavior: 'smooth' });
-    },
-    
-    type: (text, element, delay = 50) => {
-        let index = 0;
-        const interval = setInterval(() => {
-            element.querySelector('.message-text').textContent += text[index++];
-            if (index >= text.length) clearInterval(interval);
-        }, delay);
+        startEllipsisAnimation();
+        initializeEmbeddings().finally(() => {
+            stopEllipsisAnimation();
+        });
+    } else if (pipe) {
+        openChat();
     }
-};
-
-const similarityUtils = {
-    cosine: (a, b) => {
-        const dot = a.reduce((sum, val, i) => sum + val * b[i], 0);
-        const magnitude = v => Math.sqrt(v.reduce((sum, val) => sum + val * val, 0));
-        return dot / (magnitude(a) * magnitude(b));
-    },
-    
-    getEmbedding: async text => {
+});
+    document.querySelector('.close-chat-button').addEventListener('click', function() {
+        const chat = document.querySelector('.chat-container');
+        const toggleButton = document.querySelector('.chat-toggle-button');
+        chat.style.display = 'none';
+        toggleButton.style.display = 'flex';
+    });
+    document.getElementById('inputText').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+    window.addEventListener('resize', function() {
+        const chat = document.querySelector('.chat-container');
+        const toggleButton = document.querySelector('.chat-toggle-button');
+        if (chat.style.display === 'flex') {
+            toggleButton.style.display = 'none';
+        } else {
+            toggleButton.style.display = 'flex';
+        }
+    });
+    async function getEmbedding(text) {
         const output = await pipe(text, { pooling: 'mean', normalize: true });
         return Array.from(output.data);
     }
-};
-
-const matchFinder = {
-    directMatch: text => {
-        if (text.length >= 7 && /(.)\1{6}/.test(text)) return text.match(/(.)\1{6}/)[0];
-        return answers.find(answer => answer.includes(text.slice(0, 7)));
-    },
-    
-    embeddingMatch: async text => {
-        const inputEmbedding = await similarityUtils.getEmbedding(text);
-        return answers.reduce((best, answer) => {
-            const score = similarityUtils.cosine(inputEmbedding, answer.embedding);
-            return score > best.score ? { answer, score } : best;
-        }, { answer: '', score: -1 }).answer;
+    function cosineSimilarity(a, b) {
+        const dot = a.reduce((sum, val, i) => sum + val * b[i], 0);
+        const magA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+        const magB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+        return dot / (magA * magB);
     }
-};
-const sendMessage = async () => {
-    const input = document.getElementById('inputText');
-    const text = input.value.trim();
-    if (!text) return;
-    input.value = '';
-    messageHandler.add(text, true);
-    const directMatch = matchFinder.directMatch(text);
+ function calculatePauseDuration(inputText) {
+    const length = inputText.length;
+    const pauseDuration = Math.min((length / 15) * 1000, 3000); 
+    return pauseDuration;
+}
+ function calculatePauseDuration(inputText) {
+    const length = inputText.length;
+    const pauseDuration = Math.min((length / 15) * 1000, 3000); 
+    return pauseDuration;
+}
+function checkForSevenChars(inputText) {
+    const sequenceRegex = /(.)\1{6}/;
+    const sequenceMatch = inputText.match(sequenceRegex);
+    if (sequenceMatch) {
+        return sequenceMatch[0];
+    }
+    if (inputText.length >= 7) {
+        let bestMatch = null;
+        let maxLength = 0;
+        for (const answer of answers) {
+            let longestMatch = '';
+            let currentMatch = '';
+            for (let i = 0; i < inputText.length; i++) {
+                for (let j = 0; j < answer.length; j++) {
+                    let k = 0;
+                    while (i + k < inputText.length && 
+                           j + k < answer.length && 
+                           inputText[i + k] === answer[j + k]) {
+                        currentMatch += inputText[i + k];
+                        k++;
+                    }
+                    if (currentMatch.length > longestMatch.length) {
+                        longestMatch = currentMatch;
+                    }
+                    currentMatch = '';
+                }
+            }
+            if (longestMatch.length >= 7 && longestMatch.length > maxLength) {
+                maxLength = longestMatch.length;
+                bestMatch = answer;
+            }
+        }
+        return bestMatch;
+    }
+    return null;
+}
+async function findBestMatch(inputText) {
+    const directMatch = checkForSevenChars(inputText);
     if (directMatch) {
-        await new Promise(r => setTimeout(r, Math.min((text.length/15)*1000, 3000)));
-        return messageHandler.add(directMatch, false);
+        const pauseDuration = calculatePauseDuration(inputText);
+        await new Promise(resolve => setTimeout(resolve, pauseDuration));
+        addBotMessage(directMatch);
+        return;
+    }
+    if (!pipe) {
+        alert('Embeddings still loading...');
+        return;
     }
     const loader = document.createElement('div');
     loader.className = 'loader';
-    messageHandler.add(loader.outerHTML, false);
-    
+    const loadingMessage = document.createElement('div');
+    loadingMessage.classList.add('message', 'bot');
+    loadingMessage.innerHTML = `<div class="message-text"></div>`;
+    loadingMessage.querySelector('.message-text').appendChild(loader);
+    document.getElementById('chatHistory').appendChild(loadingMessage);
+    loader.style.display = 'inline-block';
     try {
-        const response = await matchFinder.embeddingMatch(text);
+        const inputEmbedding = await getEmbedding(inputText);
+        let bestScore = -1;
+        let bestAnswer = '';
+        for (const answer of answers) {
+            const answerEmbedding = await getEmbedding(answer);
+            const score = cosineSimilarity(inputEmbedding, answerEmbedding);
+            if (score > bestScore) {
+                bestScore = score;
+                bestAnswer = answer;
+            }
+        }
+        const pauseDuration = calculatePauseDuration(inputText);
+        await new Promise(resolve => setTimeout(resolve, pauseDuration));
+        addBotMessage(`${bestAnswer}`);
+    } catch (error) {
+        console.error(error);
+        addBotMessage("Помилка!");
     } finally {
-        document.querySelector('.bot:last-child .loader')?.remove();
+        loadingMessage.remove();
     }
-};
-document.getElementById('inputText').addEventListener('keypress', e => e.key === 'Enter' && sendMessage());
-window.addEventListener('scroll', () => {
-    const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
-    document.querySelectorAll('.answer').forEach(el => {
-        const { top, bottom } = el.getBoundingClientRect();
-        const visible = top < window.innerHeight && bottom > 0.3 * window.innerHeight;
-        el.style = `opacity:${visible ? 1 : 0}; transition:opacity 0.4s, transform 0.4s; transform:translateX(${visible ? 0 : '50px'})`;
-    });
+}
+    function addUserMessage(text) {
+        const chatHistory = document.getElementById('chatHistory');
+        const message = document.createElement('div');
+        message.classList.add('message', 'user');
+        message.innerHTML = `<div class="message-text">${text}</div>`;
+        chatHistory.appendChild(message);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+function typeMessage(text, messageElement, delay = 50) {
+    let index = 0;
+    const interval = setInterval(() => {
+        if (index < text.length) {
+            messageElement.querySelector('.message-text').textContent += text[index];
+            index++;
+        } else {
+            clearInterval(interval);
+        }
+    }, delay);
+}
+function addBotMessage(text) {
+    const chatHistory = document.getElementById('chatHistory');
+    const message = document.createElement('div');
+    message.classList.add('message', 'bot');
+    message.innerHTML = `<div class="message-text"></div>`;
+    chatHistory.appendChild(message);
+    typeMessage(text, message);
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+    function sendMessage() {
+        const inputText = document.getElementById('inputText').value.trim();
+        if (!inputText) return;
+        addUserMessage(inputText);
+        document.getElementById('inputText').value = '';
+        findBestMatch(inputText);
+    }
+    var s = 5, p = 0;
+window.addEventListener('scroll', function(e) {
+    var a = window.pageYOffset || document.documentElement.scrollTop,
+        h = window.innerHeight,
+        c = document.querySelectorAll('.answer');
+    c.forEach(function(e) {
+        var r = e.getBoundingClientRect(),
+            t = r.top,
+            b = r.bottom;
+        if (t < h && b > 0.3 * h) {
+            e.style = 'opacity:1;transition:opacity 0.4s ease-in-out, transform 0.4s ease-in-out;transform:translateX(0)';
+        } else if (a > p + s) {
+            e.style = 'opacity:0;transition:opacity 0.4s ease-in-out, transform 0.4s ease-in-out;transform:translateX(50px)';
+        } else if (a < p - s) {
+            e.style = 'opacity:1;transition:opacity 0.4s ease-in-out, transform 0.4s ease-in-out;transform:translateX(0)';
+        }
+    }), p = a;
 });
 </script>
 </body>
