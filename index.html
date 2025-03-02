@@ -22,6 +22,25 @@
         p {
             font-weight: 500;
         }
+        .answer {
+  flex-direction: column;
+  margin-inline: 1vw;
+  width: calc(100% - 2vw); 
+  margin-top:5vh;
+  margin-bottom:5vh;
+        }
+        .answer:nth-child(odd) {
+  align-items: flex-start; /* Align odd elements to the left */
+  text-align: left;
+}
+.answer:nth-child(even) {
+  align-items: flex-end; /* Align even elements to the right */
+  text-align: right;
+}
+.answer.centered {
+  align-items: center;
+  text-align: center;
+}
         header {
             background: grey;
             color: white;
@@ -359,11 +378,14 @@
             <p class="answer">
                 Вітаємо на сторінці проєкту <b>«Теоретичне і прикладне забезпечення розвитку смарт-інфраструктури розумних міст в період війни та післявоєнного відновлення України з урахуванням досвіду держав-членів Європейського Союзу»</b> ( <i>керівник д. юрид. наук, проф. Олег Заярний, секція 13 – Економічні перетворення, бізнес, адміністрування та право</i> ).
             </p>
-        </div>
-        <br><br><br><br><br><br><br><br><br><br>
-                <div class="container">
             <p class="answer">
-                Вітаємо на сторінці проєкту <b>«Теоретичне і прикладне забезпечення розвитку смарт-інфраструктури розумних міст в період війни та післявоєнного відновлення України з урахуванням досвіду держав-членів Європейського Союзу»</b> ( <i>керівник д. юрид. наук, проф. Олег Заярний, секція 13 – Економічні перетворення, бізнес, адміністрування та право</i> ).
+                RIGHT Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras rhoncus odio nec dictum tincidunt. Phasellus congue efficitur sapien sed posuere. Aliquam erat volutpat. Phasellus ornare ligula id odio convallis, et molestie odio dapibus. Cras faucibus ex ut leo lacinia condimentum. Fusce dapibus diam sed lacus pellentesque semper. Aenean a mollis ac. 
+                        </p>
+            <p class="answer">
+                LEFT Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras rhoncus odio nec dictum tincidunt. Phasellus congue efficitur sapien sed posuere. Aliquam erat volutpat. Phasellus ornare ligula id odio convallis, et molestie odio dapibus. Cras faucibus ex ut leo lacinia condimentum. Fusce dapibus diam sed lacus pellentesque semper. Aenean a mollis ac. 
+                        </p>
+            <p class="answer">
+                RIGHT Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras rhoncus odio nec dictum tincidunt. Phasellus congue efficitur sapien sed posuere. Aliquam erat volutpat. Phasellus ornare ligula id odio convallis, et molestie odio dapibus. Cras faucibus ex ut leo lacinia condimentum. Fusce dapibus diam sed lacus pellentesque semper. Aenean a mollis ac. 
             </p>
         </div>
     </main>
