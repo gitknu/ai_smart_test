@@ -50,6 +50,12 @@ header {
     align-items: center; /* Vertically center all content */
     justify-content: center; /* Horizontally center all content */
 }
+model-viewer {
+    max-width: 200px;
+    min-height: 250px;
+    align-self: center;
+    margin-left: 10px;
+}
         .header-container {
             display: flex;
             align-items: baseline;
@@ -335,12 +341,6 @@ header {
     .button-icon {
         height: 30px;
     }
-model-viewer {
-    height: 95% !important;
-    width: auto !important;
-    align-self: center;
-    margin-left: 1px;
-}
 }
     </style>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
@@ -363,10 +363,9 @@ model-viewer {
                     <div class="science-ience">ience</div>
                     <model-viewer 
                         src="https://gitknu.github.io/ai_smart_test/3d_comp.glb" 
-                        alt="A 3D model" 
-                        auto-rotate 
                         camera-controls
-                        disable-zoom>
+                        disable-zoom
+                        camera-orbit="50deg 75deg 2.7m">
                     </model-viewer>
                 </div>
             </div>
@@ -515,11 +514,6 @@ document.querySelector('.chat-toggle-button').addEventListener('click', function
         const magB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
         return dot / (magA * magB);
     }
- function calculatePauseDuration(inputText) {
-    const length = inputText.length;
-    const pauseDuration = Math.min((length / 15) * 1000, 3000); 
-    return pauseDuration;
-}
  function calculatePauseDuration(inputText) {
     const length = inputText.length;
     const pauseDuration = Math.min((length / 15) * 1000, 3000); 
