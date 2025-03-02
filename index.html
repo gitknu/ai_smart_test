@@ -360,6 +360,12 @@
                 Вітаємо на сторінці проєкту <b>«Теоретичне і прикладне забезпечення розвитку смарт-інфраструктури розумних міст в період війни та післявоєнного відновлення України з урахуванням досвіду держав-членів Європейського Союзу»</b> ( <i>керівник д. юрид. наук, проф. Олег Заярний, секція 13 – Економічні перетворення, бізнес, адміністрування та право</i> ).
             </p>
         </div>
+        <br><br><br><br><br><br><br><br><br><br>
+                <div class="container">
+            <p class="answer">
+                Вітаємо на сторінці проєкту <b>«Теоретичне і прикладне забезпечення розвитку смарт-інфраструктури розумних міст в період війни та післявоєнного відновлення України з урахуванням досвіду держав-членів Європейського Союзу»</b> ( <i>керівник д. юрид. наук, проф. Олег Заярний, секція 13 – Економічні перетворення, бізнес, адміністрування та право</i> ).
+            </p>
+        </div>
     </main>
     <footer>
         <div class="container">
@@ -611,6 +617,24 @@ function addBotMessage(text) {
         document.getElementById('inputText').value = '';
         findBestMatch(inputText);
     }
+    var s = 5, p = 0;
+window.addEventListener('scroll', function(e) {
+    var a = window.pageYOffset || document.documentElement.scrollTop,
+        h = window.innerHeight,
+        c = document.querySelectorAll('.answer');
+    c.forEach(function(e) {
+        var r = e.getBoundingClientRect(),
+            t = r.top,
+            b = r.bottom;
+        if (t < h && b > 0.3 * h) {
+            e.style = 'opacity:1;transition:opacity 0.4s ease-in-out, transform 0.4s ease-in-out;transform:translateX(0)';
+        } else if (a > p + s) {
+            e.style = 'opacity:0;transition:opacity 0.4s ease-in-out, transform 0.4s ease-in-out;transform:translateX(50px)';
+        } else if (a < p - s) {
+            e.style = 'opacity:1;transition:opacity 0.4s ease-in-out, transform 0.4s ease-in-out;transform:translateX(0)';
+        }
+    }), p = a;
+});
 </script>
 </body>
 </html>
