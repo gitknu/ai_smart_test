@@ -22,22 +22,22 @@
         p {
             font-weight: 500;
         }
-        .answer {
+        .appear, table {
   flex-direction: column;
   margin-inline: 1vw;
   width: calc(100% - 2vw); 
   margin-top:5vh;
   margin-bottom:5vh;
         }
-        .answer:nth-child(odd) {
+        .appear:nth-child(odd) {
   align-items: flex-start; 
   text-align: left;
 }
-.answer:nth-child(even) {
+.appear:nth-child(even) {
   align-items: flex-end; 
   text-align: right;
 }
-.answer.centered {
+.appear.centered {
   align-items: center;
   text-align: center;
 }
@@ -415,18 +415,40 @@ model-viewer {
     </header>
     <main>
         <div class="container">
-            <p class="answer">
-                Вітаємо на сторінці проєкту <b>«Теоретичне і прикладне забезпечення розвитку смарт-інфраструктури розумних міст в період війни та післявоєнного відновлення України з урахуванням досвіду держав-членів Європейського Союзу»</b> ( <i>керівник д. юрид. наук, проф. Олег Заярний, секція 13 – Економічні перетворення, бізнес, адміністрування та право</i> ).
+            <p class="appear">
+                Вітаємо на сторінці проєкту <b><span class="answer">«Теоретичне і прикладне забезпечення розвитку смарт-інфраструктури розумних міст в період війни та післявоєнного відновлення України з урахуванням досвіду держав-членів Європейського Союзу»</span></b> ( <i>керівник д. юрид. наук, проф. Олег Заярний, секція 13 – Економічні перетворення, бізнес, адміністрування та право</i> ).
             </p>
-            <p class="answer">
-                RIGHT Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras rhoncus odio nec dictum tincidunt. Phasellus congue efficitur sapien sed posuere. Aliquam erat volutpat. Phasellus ornare ligula id odio convallis, et molestie odio dapibus. Cras faucibus ex ut leo lacinia condimentum. Fusce dapibus diam sed lacus pellentesque semper. Aenean a mollis ac. 
-                        </p>
-            <p class="answer">
-                LEFT Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras rhoncus odio nec dictum tincidunt. Phasellus congue efficitur sapien sed posuere. Aliquam erat volutpat. Phasellus ornare ligula id odio convallis, et molestie odio dapibus. Cras faucibus ex ut leo lacinia condimentum. Fusce dapibus diam sed lacus pellentesque semper. Aenean a mollis ac. 
-                        </p>
-            <p class="answer">
-                RIGHT Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras rhoncus odio nec dictum tincidunt. Phasellus congue efficitur sapien sed posuere. Aliquam erat volutpat. Phasellus ornare ligula id odio convallis, et molestie odio dapibus. Cras faucibus ex ut leo lacinia condimentum. Fusce dapibus diam sed lacus pellentesque semper. Aenean a mollis ac. 
-            </p>
+            <table class="appear">
+                <tr>
+                До нашої команди входять чудові люди, справжні фахівці своєї справи, а саме:</tr>
+            <tr><td><td/><td>
+                <span class="answer"><b>Олег Заярний</b> - lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                        </span></td></tr>
+            <tr><td><td/><td>
+                <span class="answer"><b>Василь Орищук</b> - lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+            </span></td></tr>
+            <tr><td><td/><td>
+                <span class="answer"><b>Тетяна Тесьолкіна</b> - lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </span></td></tr>
+            <tr><td><td/><td>
+                <span class="answer"><b>Олена Почаєвець</b> - lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </span></td></tr>
+            <tr><td><td/><td>
+                <span class="answer"><b>Роман Остапенко</b> - lorem ipsum dolor sit amet, consectetur adipiscing elit.
+</span></td></tr>
+            <tr><td><td/><td>
+                <span class="answer"><b>Петро Катеринич</b> - lorem ipsum dolor sit amet, consectetur adipiscing elit.
+</span></td></tr>
+            <tr><td><td/><td>
+                <span class="answer"><b>Богдан Карлаш</b> - lorem ipsum dolor sit amet, consectetur adipiscing elit.
+</span></td></tr>
+            <tr><td><td/><td>
+                <span class="answer"><b>Андрій Чуян</b> - lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </span></td></tr>
+                            <tr><td><td/><td>
+                <span class="answer"><b>Юрій Крак</b> - lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </span></td></tr>
+            </table>
         </div>
     </main>
     <footer>
@@ -646,7 +668,7 @@ async function sendMessage() {
 window.addEventListener('scroll', () => {
     const scrollY = window.pageYOffset || document.documentElement.scrollTop;
     const viewportHeight = window.innerHeight;
-    document.querySelectorAll('.answer').forEach(el => {
+    document.querySelectorAll('.appear').forEach(el => {
         const rect = el.getBoundingClientRect();
         const isVisible = rect.top < viewportHeight && rect.bottom > 0.3 * viewportHeight;
         el.style.opacity = isVisible ? 1 : 0;
