@@ -292,20 +292,6 @@ model-viewer {
             align-items: center;
             justify-content: center;
         }
-.loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #007bff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: none;
-            margin: 5px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
 @media (max-aspect-ratio: 1/1), (max-width: 638px) {
     table td:first-child {
         width: 35%;
@@ -566,8 +552,6 @@ async function findBestMatch(inputText) {
         return;
     }
     if (!pipe) return alert('Embeddings still loading...');
-    const loader = document.createElement('div');
-    loader.className = 'loader';
     const loadingMessage = document.createElement('div');
     loadingMessage.classList.add('message', 'bot');
     loadingMessage.innerHTML = `<div class="message-text"></div>`;
