@@ -313,44 +313,36 @@ model-viewer {
         width: 65%;
     }
 }
-        @media (max-width: 768px) {
-                        .chat-container {
-                width: 300px;
-                height: 400px;
-                right: 10px;
-                bottom: 10px;
-            }
+        @media (max-aspect-ratio: 1/1) {
+    .chat-container {
+        width: 80vw;
+        height: 50vh;
+        right: 2vw;
+        bottom: 2vh;
+    }
     .chat-toggle-button,
     .contact-toggle-button {
-        width: 60px;
-        height: 60px;
-        right: 15px;
+        width: 8vw;
+        height: 8vw;
+        right: 2vw;
     }
     .contact-toggle-button {
-        bottom: 90px;
+        bottom: 12vh;
     }
     .button-icon {
-        height: 35px;
+        height: 5vw;
     }
-            .science-letter, .science-ience {
-                font-size: 6rem;
-            }       
-            .subscript {
-                font-size: 1.5rem; 
-                bottom: -2.5rem; 
-            }
-            .logo-group {
-                height: 120px;
-            }
-            .chat-container {
-                width: 80%;
-                height: 50vh;
-                left: 50%;
-                transform: translateX(-50%);
-                bottom: 20px;
-                border-radius: 10px;
-            }
-        }
+    .science-letter, .science-ience {
+        font-size: 10vw;
+    }       
+    .subscript {
+        font-size: 2.5vw; 
+        bottom: -4vh; 
+    }
+    .logo-group {
+        height: 15vh;
+    }
+}
 @media (max-width: 638px) {
     header {
         padding: 2rem 0;
@@ -386,36 +378,36 @@ model-viewer {
         gap: 0.3rem; 
     }
 }
-        @media (max-width: 480px) {
-            .science-letter, .science-ience {
-                font-size: 4.5rem; 
-            }
-            .subscript {
-                font-size: 1.2rem; 
-                bottom: -2.5rem;
-            }
-            .logo-group {
-                height: 90px;
-            }
-            .chat-container {
-                width: 80%;
-                height: 50vh;
-                left: 50%;
-                transform: translateX(-50%);
-                bottom: 20px;
-                border-radius: 10px;
-            }
-                 .chat-toggle-button,
+       @media (max-aspect-ratio: 1/1) and (max-width: 480px) {
+    .science-letter, .science-ience {
+        font-size: 7vw; 
+    }
+    .subscript {
+        font-size: 2vw; 
+        bottom: -3vh;
+    }
+    .logo-group {
+        height: 12vh;
+    }
+    .chat-container {
+        width: 90vw;
+        height: 60vh;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 2vh;
+        border-radius: 10px;
+    }
+    .chat-toggle-button,
     .contact-toggle-button {
-        width: 50px;
-        height: 50px;
-        right: 10px;
+        width: 10vw;
+        height: 10vw;
+        right: 2vw;
     }
     .contact-toggle-button {
-        bottom: 80px;
+        bottom: 10vh;
     }
     .button-icon {
-        height: 30px;
+        height: 6vw;
     }
 }
     </style>
