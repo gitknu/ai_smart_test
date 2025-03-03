@@ -15,6 +15,7 @@
             font-family: 'Montserrat', sans-serif;
         }
         body {
+            overflow-x: hidden;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -320,15 +321,17 @@ model-viewer {
     }
     .chat-toggle-button,
     .contact-toggle-button {
+        right: 4vw;
         width: 15vw;
         height: 15vw;
-        right: 4vw;
-    }
-    .contact-toggle-button {
+        margin-right: 0;
         bottom: 18vh;
     }
+    .contact-toggle-button {
+        bottom: calc(18vh + 20vw);
+    }
     .button-icon {
-        height: 10vw;
+        height: 8vw;
     }
     .science-letter {
         font-size: 15vw;
