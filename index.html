@@ -41,6 +41,13 @@
   align-items: center;
   text-align: center;
 }
+.chat-input::placeholder {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+.chat-input:disabled::placeholder {
+    opacity: 0;
+}
 header {
     background: grey;
     color: white;
@@ -563,7 +570,6 @@ function addBotMessage(text) {
     message.classList.add('message', 'bot');
     message.innerHTML = `<div class="message-text"></div>`;
     chatHistory.appendChild(message);
-
     let index = 0;
     const interval = setInterval(() => {
         if (index < text.length) {
@@ -576,6 +582,7 @@ function addBotMessage(text) {
             inputField.disabled = false;
             sendButton.disabled = false;
             isProcessing = false; 
+            inputField.placeholder = inputField.getAttribute('data-placeholder');
             inputField.focus(); 
         }
     }, 50);
@@ -590,13 +597,15 @@ async function sendMessage() {
     inputField.disabled = true;
     sendButton.disabled = true;
     isProcessing = true; 
+    inputField.setAttribute('data-placeholder', inputField.placeholder);
+    inputField.placeholder = ''; 
     addUserMessage(inputText);
     document.getElementById('inputText').value = '';
     try {
         await findBestMatch(inputText); 
     } catch (error) {
         console.error(error);
-        addBotMessage("Сталася помилка при обробці запиту.");
+        addBotMessage("Помилка!");
     }
 }
 window.addEventListener('scroll', () => {
