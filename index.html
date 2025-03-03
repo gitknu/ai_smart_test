@@ -317,6 +317,41 @@ model-viewer {
                 border-radius: 10px;
             }
         }
+@media (max-width: 638px) {
+    header {
+        padding: 2rem 0;
+        height: auto;
+        min-height: 120px;
+    }
+    .logo-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem; 
+        height: auto !important;
+    }
+    .science-letter {
+        font-size: 5rem !important; 
+    }
+    .science-ience {
+        font-size: 3.5rem !important;
+    }
+    .subscript {
+        font-size: 1.2rem !important; 
+        bottom: -1.5rem !important; 
+    }
+    model-viewer {
+        max-width: 120px !important;
+        min-height: 150px !important;
+        margin-left: 0;
+    }
+    .header-container {
+        justify-content: center;
+    }
+    .main-letters {
+        gap: 0.3rem; 
+    }
+}
         @media (max-width: 480px) {
             .science-letter, .science-ience {
                 font-size: 4.5rem; 
