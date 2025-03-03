@@ -292,6 +292,9 @@ model-viewer {
             align-items: center;
             justify-content: center;
         }
+.loader {
+            display: none;
+        }
 @media (max-aspect-ratio: 1/1), (max-width: 638px) {
     table td:first-child {
         width: 35%;
@@ -552,6 +555,8 @@ async function findBestMatch(inputText) {
         return;
     }
     if (!pipe) return alert('Embeddings still loading...');
+    const loader = document.createElement('div');
+    loader.className = 'loader';
     const loadingMessage = document.createElement('div');
     loadingMessage.classList.add('message', 'bot');
     loadingMessage.innerHTML = `<div class="message-text"></div>`;
