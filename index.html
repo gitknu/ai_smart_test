@@ -305,109 +305,57 @@ model-viewer {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        @media (max-aspect-ratio: 1/1) {
+@media (max-aspect-ratio: 1/1), (max-width: 638px) {
     table td:first-child {
         width: 35%;
     }
     table td:last-child {
         width: 65%;
     }
-}
-        @media (max-aspect-ratio: 1/1) {
     .chat-container {
-        width: 80vw;
-        height: 50vh;
+        width: 90vw;
+        height: 60vh;
         right: 2vw;
         bottom: 2vh;
     }
     .chat-toggle-button,
     .contact-toggle-button {
-        width: 8vw;
-        height: 8vw;
-        right: 2vw;
+        width: 15vw; /* Even larger proportional size */
+        height: 15vw; /* Even larger proportional size */
+        right: 4vw; /* Adjusted position */
     }
     .contact-toggle-button {
-        bottom: 12vh;
+        bottom: 18vh; /* Adjusted position */
     }
     .button-icon {
-        height: 5vw;
+        height: 10vw; /* Even larger proportional size */
     }
-    .science-letter, .science-ience {
-        font-size: 10vw;
-    }       
+    .science-letter {
+        font-size: 15vw; /* Even larger proportional size */
+    }
+    .science-ience {
+        font-size: 12vw; /* Even larger proportional size */
+    }
     .subscript {
-        font-size: 2.5vw; 
-        bottom: -4vh; 
+        font-size: 4vw; /* Even larger proportional size */
+        bottom: -5vh; /* Adjusted position */
     }
-    .logo-group {
-        height: 15vh;
-    }
-}
-@media (max-width: 638px) {
     header {
         padding: 2rem 0;
         height: auto;
         min-height: 120px;
     }
-    .logo-group {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem; 
-        height: auto !important;
-    }
-    .science-letter {
-        font-size: 5rem !important; 
-    }
-    .science-ience {
-        font-size: 3.5rem !important;
-    }
-    .subscript {
-        font-size: 1.2rem !important; 
-        bottom: -1.5rem !important; 
-    }
     model-viewer {
-        max-width: 120px !important;
-        min-height: 150px !important;
-        margin-left: 0;
+        max-width: 30vw !important; /* Even larger proportional size */
+        min-height: 35vh !important; /* Even larger proportional size */
     }
-    .header-container {
+    .logo-group {
+        height: auto !important;
+        gap: 0.5rem;
         justify-content: center;
     }
     .main-letters {
-        gap: 0.3rem; 
-    }
-}
-       @media (max-aspect-ratio: 1/1) and (max-width: 480px) {
-    .science-letter, .science-ience {
-        font-size: 7vw; 
-    }
-    .subscript {
-        font-size: 2vw; 
-        bottom: -3vh;
-    }
-    .logo-group {
-        height: 12vh;
-    }
-    .chat-container {
-        width: 90vw;
-        height: 60vh;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 2vh;
-        border-radius: 10px;
-    }
-    .chat-toggle-button,
-    .contact-toggle-button {
-        width: 10vw;
-        height: 10vw;
-        right: 2vw;
-    }
-    .contact-toggle-button {
-        bottom: 10vh;
-    }
-    .button-icon {
-        height: 6vw;
+        gap: 0.3rem;
     }
 }
     </style>
