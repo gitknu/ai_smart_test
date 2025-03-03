@@ -32,6 +32,28 @@
   margin-top:5vh;
   margin-bottom:5vh;
         }
+        table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table td:first-child {
+    width: 20%;
+    padding: 10px;
+    overflow: hidden; /* Ensures rounded corners are visible */
+}
+
+table td:last-child {
+    width: 80%;
+    padding: 10px;
+}
+
+table img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+}
         .appear:nth-child(odd) {
   align-items: flex-start; 
   text-align: left;
