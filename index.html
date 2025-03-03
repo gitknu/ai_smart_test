@@ -305,6 +305,14 @@ model-viewer {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        @media (max-aspect-ratio: 1/1) {
+    table td:first-child {
+        width: 35%;
+    }
+    table td:last-child {
+        width: 65%;
+    }
+}
         @media (max-width: 768px) {
                         .chat-container {
                 width: 300px;
