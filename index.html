@@ -14,13 +14,14 @@
             box-sizing: border-box;
             font-family: 'Montserrat', sans-serif;
         }
-        body {
-            overflow-x: hidden;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            line-height: 1.6;
-        }
+body {
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.6;
+    position: relative; /* Add this line */
+}
         main, footer {
             font-size: max(16px, 2vh);
         }
@@ -166,23 +167,25 @@ model-viewer {
         .close-chat-button:hover {
             color: #ccc;
         }
-        .chat-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 500px;
-            height: 500px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            display: none;
-            flex-direction: column;
-            z-index: 1001;
-            transition: all 0.3s ease;
-        }
+.chat-container {
+    position: fixed;
+    bottom: 2vh;
+    right: 2vw;
+    width: 500px;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: none;
+    flex-direction: column;
+    z-index: 1001;
+    transition: all 0.3s ease;
+    transform: none !important; /* Add this line */
+    margin-right: 0 !important; /* Add this line */
+}
 .chat-toggle-button,
 .contact-toggle-button {
-    right: 20px;
+    right: 2vw;
     width: 70px;
     height: 70px;
     position: fixed;
@@ -195,10 +198,12 @@ model-viewer {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out, height 0.4s ease-in-out, box-shadow 0.4s ease-in-out; /* Replace transition */
     border: none;
     cursor: pointer;
     z-index: 1000;
+    transform: none !important; /* Add this line */
+    margin-right: 0 !important; /* Add this line */
 }
 .chat-toggle-button:hover,
 .contact-toggle-button:hover {
@@ -314,21 +319,23 @@ model-viewer {
         width: 65%;
     }
     .chat-container {
-        width: 90vw;
+        width: 96vw !important; /* Replace width */
         height: 60vh;
-        right: 2vw;
+        right: 2vw !important; /* Add !important */
         bottom: 2vh;
+        left: auto !important; /* Add this line */
     }
     .chat-toggle-button,
     .contact-toggle-button {
-        right: 4vw;
+        right: 2vw !important; /* Replace right value */
         width: 15vw;
         height: 15vw;
-        margin-right: 0;
-        bottom: 4vh;
+        margin-right: 0 !important; /* Add !important */
+        bottom: 2vh !important; /* Replace bottom value */
+        left: auto !important; /* Add this line */
     }
     .contact-toggle-button {
-        bottom: calc(4vh + 20vw);
+        bottom: calc(2vh + 20vw) !important; /* Replace bottom value */
     }
     .button-icon {
         height: 8vw;
