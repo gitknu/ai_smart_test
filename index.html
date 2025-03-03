@@ -14,8 +14,10 @@
             box-sizing: border-box;
             font-family: 'Montserrat', sans-serif;
         }
-        body {
+        html {
             overflow-x: hidden;
+        }
+        body {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -182,7 +184,9 @@ model-viewer {
         }
 .chat-toggle-button,
 .contact-toggle-button {
-    right: 20px;
+    right: 2vw !important;
+    margin-right: 0 !important;
+    left: auto !important;
     width: 70px;
     height: 70px;
     position: fixed;
@@ -316,19 +320,21 @@ model-viewer {
     .chat-container {
         width: 90vw;
         height: 60vh;
-        right: 2vw;
         bottom: 2vh;
+        right: 2vw !important;
+        left: auto !important;
     }
     .chat-toggle-button,
     .contact-toggle-button {
-        right: 4vw;
         width: 15vw;
         height: 15vw;
         margin-right: 0;
-        bottom: 4vh;
+        right: 2vw !important;
+        bottom: 2vh !important;
+        left: auto !important;
     }
     .contact-toggle-button {
-        bottom: calc(4vh + 20vw);
+        bottom: calc(2vh + 20vw) !important;
     }
     .button-icon {
         height: 8vw;
