@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #hoverElement {
+            padding: 20px;
+            background: #f0f0f0;
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #player {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="hoverElement">Hover over me to play 5s audio</div>
+    <div id="player"></div>
+
+    <script>
+        // Load YouTube IFrame API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0',
+                width: '0',
+                videoId: 'Gr_X2LejEiY',
+                playerVars: {
+                    start: 134,
+                    end: 139,
+                    autoplay: 0,
+                    controls: 0,
+                    modestbranding: 1,
+                    rel: 0
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.mute(); // Start muted to bypass autoplay restrictions
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                event.target.seekTo(134);
+            }
+        }
+
+        // Hover handling
+        const hoverElement = document.getElementById('hoverElement');
+        let playbackTimeout;
+
+        hoverElement.addEventListener('mouseenter', () => {
+            player.unMute();
+            player.seekTo(134);
+            player.playVideo();
+        });
+
+        hoverElement.addEventListener('mouseleave', () => {
+            player.pauseVideo();
+            player.seekTo(134);
+            clearTimeout(playbackTimeout);
+        });
+    </script>
+</body>
+</html>
