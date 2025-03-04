@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M13,9a1,1,0,0,0-1-1H3A1,1,0,0,0,2,9V22H13ZM6,20H4V18H6Zm0-4H4V14H6Zm0-4H4V10H6Zm5,8H8V18h3Zm0-4H8V14h3Zm0-4H8V10h3Zm3.5-6H6V3A1,1,0,0,1,7,2H17a1,1,0,0,1,1,1v7H15V6.5A.5.5,0,0,0,14.5,6ZM22,13v9H19.5V18h-2v4H15V13a1,1,0,0,1,1-1h5A1,1,0,0,1,22,13Z'/%3E%3C/svg%3E"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;500;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+        body {
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+        main, footer {
+            font-size: max(16px, 2vh);
+        }
+        p {
+            font-weight: 500;
+        }
+        .appear, table {
+  flex-direction: column;
+  margin-inline: 1vw;
+  width: calc(100% - 2vw); 
+  margin-top:5vh;
+  margin-bottom:5vh;
+        }
+        table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table td:first-child {
+    width: 20%;
+    padding: 10px;
+    overflow: hidden; /* Ensures rounded corners are visible */
+}
+
+table td:last-child {
+    width: 80%;
+    padding: 10px;
+}
+
+table img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+}
+        .appear:nth-child(odd) {
+  align-items: flex-start; 
+  text-align: left;
+}
+.appear:nth-child(even) {
+  align-items: flex-end; 
+  text-align: right;
+}
+.appear.centered {
+  align-items: center;
+  text-align: center;
+}
+.chat-input::placeholder {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+.chat-input:disabled::placeholder {
+    opacity: 0;
+}
+header {
+    background: grey;
+    color: white;
+    padding: 7rem 0;
+    height: 150px; 
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+}
+model-viewer {
+    max-width: 200px;
+    min-height: 250px;
+    align-self: center;
+    margin-left: 10px;
+}
+        .header-container {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+.logo-group {
+    display: flex;
+    align-items: center; 
+    position: relative;
+    height: 100%; 
+}
+        .main-letters {
+            display: flex;
+            align-items: flex-start;
+        }
+        .letter-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .science-letter {
+            font-weight: 900;
+            font-size: 9rem;
+            color: #b80000;
+            line-height: 0.7;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+        }
+        .science-ience {
+            font-weight: 600;
+            font-size: 6rem; 
+            color: black;
+            line-height: 0.7;
+        }
+        .subscript {
+            font-weight: 100;
+            font-size: 1.8rem;
+            color: #b80000;
+            position: absolute;
+            bottom: -2.5rem;
+            white-space: nowrap;
+        }
+        .mart {
+            left: 0;
+        }
+        .ities {
+            right: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        footer {
+            background: black;
+            color: white;
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+        .close-chat-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 50px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        .close-chat-button:hover {
+            color: #ccc;
+        }
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 500px;
+            height: 500px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+.chat-toggle-button,
+.contact-toggle-button {
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    position: fixed;
+    opacity: 0.9;
+    background-color: #007bff;
+    color: black;
+    border-radius: 50%;
+    text-align: center;
+    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.4s ease-in-out;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+}
+.chat-toggle-button:hover,
+.contact-toggle-button:hover {
+    width: 65px;
+    height: 65px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    opacity: 1;
+}
+.chat-toggle-button {
+    bottom: 20px;
+}
+.contact-toggle-button {
+    bottom: 100px;
+}
+.button-icon {
+    height: 45px;
+    transition: all 0.4s ease-in-out;
+    filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.2));
+}
+        .chat-header {
+            font-weight: 600;
+            background-color: #202123;
+            color: #fff;
+            padding: 15px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .chat-history {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .message.user {
+            align-items: flex-end;
+        }
+        .message.bot {
+            align-items: flex-start;
+        }
+        .message-text {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+        .message.user .message-text {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .message.bot .message-text {
+            background-color: #e5e5e5;
+            color: #000;
+        }
+.chat-input-container {
+            display: flex;
+            padding: 15px;
+            gap: 8px;
+            border-top: 1px solid #e5e5e5;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #e5e5e5;
+            border-radius: 5px;
+            outline: none;
+        }
+        .chat-input:focus {
+            border-color: #007bff;
+        }
+        .send-button {
+            padding: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+.loader {
+            display: none;
+        }
+@media (min-aspect-ratio: 1/1) and (min-width: 639px) {
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .container > .appear {
+        flex: 0 0 48%;
+        margin: 5vh 0;
+    }
+}
+@media (max-aspect-ratio: 1/1), (max-width: 638px) {
+    table td:first-child {
+        width: 35%;
+    }
+    table td:last-child {
+        width: 65%;
+    }
+    .chat-container {
+        width: 90vw;
+        height: 60vh;
+        right: 2vw;
+        bottom: 2vh;
+    }
+    .chat-toggle-button,
+    .contact-toggle-button {
+        right: 4vw;
+        width: 15vw;
+        height: 15vw;
+        margin-right: 0;
+        bottom: 4vh;
+    }
+    .contact-toggle-button {
+        bottom: calc(4vh + 20vw);
+    }
+    .button-icon {
+        height: 8vw;
+    }
+    .science-letter {
+        font-size: 15vw;
+    }
+    .science-ience {
+        font-size: 12vw;
+    }
+    .subscript {
+        font-size: 4vw;
+        bottom: -5vh;
+    }
+    header {
+        padding: 2rem 0;
+        height: 25vh; /* Adjusted header height proportionally */
+        min-height: auto; /* Removed fixed min-height */
+    }
+    model-viewer {
+        max-width: 30vw !important;
+        min-height: 35vh !important;
+    }
+    .logo-group {
+        height: auto !important;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+    .main-letters {
+        gap: 0.3rem;
+    }
+}
+    </style>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-container">
+                <div class="logo-group">
+                    <div class="main-letters">
+                        <div class="letter-container">
+                            <div class="science-letter">S</div>
+                            <div class="subscript mart">mart</div>
+                        </div>
+                        <div class="letter-container">
+                            <div class="science-letter">C</div>
+                            <div class="subscript ities">ities'</div>
+                        </div>
+                    </div>
+                    <div class="science-ience">ience</div>
+                    <model-viewer 
+                        src="https://gitknu.github.io/ai_smart_test/3d_comp.glb" 
+                        camera-controls
+                        disable-zoom
+                        camera-orbit="50deg 75deg 2.7m">
+                    </model-viewer>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <p class="appear">
+                Вітаємо на сторінці проєкту <b><span class="answer">«Теоретичне і прикладне забезпечення розвитку смарт-інфраструктури розумних міст в період війни та післявоєнного відновлення України з урахуванням досвіду держав-членів Європейського Союзу»</span></b> ( <i>керівник д. юрид. наук, проф. Олег Заярний, секція 13 – Економічні перетворення, бізнес, адміністрування та право</i> ).
+            </p>
+<table class="appear">
+                <tr>
+                До нашої команди входять чудові люди, справжні фахівці своєї справи, а саме:</tr>
+            <tr><td><img src="https://gitknu.github.io/ai_smart_test/imgs/zayarniy.jpg"></img><td/><td>
+                <span class="answer"><b><i>Олег Заярний</i></b><br>lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                        </span></td></tr>
+            <tr><td><img src="https://gitknu.github.io/ai_smart_test/imgs/oryshuk.jpg"></img><td/><td>
+                <span class="answer"><b><i>Василь Орищук</i></b><br>lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+            </span></td></tr>
+            <tr><td><img src="https://gitknu.github.io/ai_smart_test/imgs/krak.jpg"></img><td/><td>
+                <span class="answer"><b><i>Юрій Крак</i></b><br>завідувач кафедри теоретичної кібернетики, понад 20 років займається безпосередньою розробкою АІ технологій
+            </span></td></tr>
+</table>
+<table class="appear">
+            <tr><td><img src="https://gitknu.github.io/ai_smart_test/imgs/pochaievets.jpg"></img><td/><td>
+                <span class="answer"><b><i>Олена Почаєвець</i></b><br> - lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </span></td></tr>
+            <tr><td><img src="https://gitknu.github.io/ai_smart_test/imgs/ostapenko.jpg"></img><td/><td>
+                <span class="answer"><b><i>Роман Остапенко</i></b><br> lorem ipsum dolor sit amet, consectetur adipiscing elit.
+</span></td></tr>
+            <tr><td><img src="https://gitknu.github.io/ai_smart_test/imgs/katerynych.jpg"></img><td/><td>
+                <span class="answer"><b><i>Петро Катеринич</i></b><br> - lorem ipsum dolor sit amet, consectetur adipiscing elit.
+</span></td></tr></table>
+<table class="appear">
+            <tr><td><img src="https://gitknu.github.io/ai_smart_test/imgs/karlash.jpg"></img><td/><td>
+                <span class="answer"><b><i>Богдан Карлаш</i></b><br> lorem ipsum dolor sit amet, consectetur adipiscing elit.
+</span></td></tr>
+            <tr><td><img src="https://gitknu.github.io/ai_smart_test/imgs/chuian.jpg"></img><td/><td>
+                <span class="answer"><b><i>Андрій Чуян</i></b><br>від жовтня 2021 займається АІ технологіями, раніше екскурсовод у Software and Computer Museum (2018 - 20).
+                </span></td></tr>
+                            <tr><td><img src="https://gitknu.github.io/ai_smart_test/imgs/tesyolkina.jpg"></img><td/><td>
+                <span class="answer"><b><i>Тетяна Тесьолкіна</i></b><br>lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                </span></td></tr>
+            </table>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Your Website. All rights reserved.</p>
+        </div>
+    </footer>
+    <div class="chat-container">
+        <div class="chat-header">
+            АІ - чат
+            <button class="close-chat-button">×</button>
+        </div>
+        <div class="chat-history" id="chatHistory">
+            <div class="message bot">
+                <div class="message-text">Є питання, а шукати не готові? 🔍<br>Можете запитати мене, ШІ! 🧠<br><br><b>Звертаю Вашу увагу:</b><br>Один запит - одне питання 📌<br>Інколи я можу помилятися 🧩<br><br>Але я буду радий допомогти!</div>
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="inputText" placeholder="Напишіть Ваш запит...">
+            <button class="send-button" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+    <a href="tel:+1234567890" class="contact-toggle-button">
+    <svg class="button-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+    </svg>
+</a>
+<button class="chat-toggle-button">
+    <svg viewBox="-150 -170 888 888">
+  <path d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z"/>
+</svg>
+</button>
+<script>
+let isProcessing = false; 
+let pipe = null, embeddingsLoading = false, answers = [], animationInterval = null;
+document.addEventListener('DOMContentLoaded', () => {
+    answers = [
+        "I'm sorry, I don't know the answer or didn't understand the question",
+        "Перепрошую, я не знаю відповідь або не зрозумів питання",
+        "My work is based on embeddings. With their help, I find the most appropriate answer and address it to you",
+        "В основі моєї роботи лежать ембедінги (embeddings). Із їх допомогою я знаходжу найбільш підходящу відповідь та адресую її Вам",
+        ...Array.from(document.querySelectorAll('.answer')).map(el => el.textContent.trim()).filter(text => text.length > 0)
+    ];
+});
+async function initializeEmbeddings() {
+    embeddingsLoading = true;
+    const { pipeline } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0');
+    pipe = await pipeline('feature-extraction', 'Xenova/paraphrase-multilingual-MiniLM-L12-v2', { quantized: true, backend: 'cpu' });
+    embeddingsLoading = false;
+    openChat();
+}
+function openChat() {
+    const chat = document.querySelector('.chat-container');
+    const toggleButton = document.querySelector('.chat-toggle-button');
+    chat.style.display = 'flex';
+    toggleButton.style.display = 'none';
+}
+function startEllipsisAnimation() {
+    const frames = ['.', '..', '...'];
+    let currentFrame = 0;
+    const button = document.querySelector('.chat-toggle-button');
+    button.innerHTML = frames[currentFrame];
+    animationInterval = setInterval(() => {
+        currentFrame = (currentFrame + 1) % frames.length;
+        button.textContent = frames[currentFrame];
+    }, 500);
+}
+function stopEllipsisAnimation() {
+    if (animationInterval) clearInterval(animationInterval);
+    const button = document.querySelector('.chat-toggle-button');
+    button.innerHTML = `<svg viewBox="-150 -170 888 888">
+  <path d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z"/>
+</svg>`;
+}
+document.querySelector('.chat-toggle-button').addEventListener('click', () => {
+    if (!pipe && !embeddingsLoading) {
+        startEllipsisAnimation();
+        initializeEmbeddings().finally(stopEllipsisAnimation);
+    } else if (pipe) openChat();
+});
+document.querySelector('.close-chat-button').addEventListener('click', () => {
+    const chat = document.querySelector('.chat-container');
+    const toggleButton = document.querySelector('.chat-toggle-button');
+    chat.style.display = 'none';
+    toggleButton.style.display = 'flex';
+});
+document.getElementById('inputText').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
+async function getEmbedding(text) {
+    const output = await pipe(text, { pooling: 'mean', normalize: true });
+    return Array.from(output.data);
+}
+function cosineSimilarity(a, b) {
+    const dot = a.reduce((sum, val, i) => sum + val * b[i], 0);
+    const magA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+    const magB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+    return dot / (magA * magB);
+}
+function calculatePauseDuration(inputText) {
+    return Math.min((inputText.length / 15) * 1000, 3000);
+}
+function checkForSevenChars(inputText) {
+    const sequenceRegex = /(.)\1{6}/;
+    const sequenceMatch = inputText.match(sequenceRegex);
+    if (sequenceMatch) return sequenceMatch[0];
+    if (inputText.length >= 7) {
+        let bestMatch = null, maxLength = 0;
+        for (const answer of answers) {
+            let longestMatch = '';
+            for (let i = 0; i < inputText.length; i++) {
+                for (let j = 0; j < answer.length; j++) {
+                    let k = 0;
+                    while (i + k < inputText.length && j + k < answer.length && inputText[i + k] === answer[j + k]) {
+                        longestMatch += inputText[i + k];
+                        k++;
+                    }
+                    if (longestMatch.length >= 7 && longestMatch.length > maxLength) {
+                        maxLength = longestMatch.length;
+                        bestMatch = answer;
+                    }
+                    longestMatch = '';
+                }
+            }
+        }
+        return bestMatch;
+    }
+    return null;
+}
+async function findBestMatch(inputText) {
+    const directMatch = checkForSevenChars(inputText);
+    if (directMatch) {
+        await new Promise(resolve => setTimeout(resolve, calculatePauseDuration(inputText)));
+        addBotMessage(directMatch);
+        return;
+    }
+    if (!pipe) return alert('Embeddings still loading...');
+    const loader = document.createElement('div');
+    loader.className = 'loader';
+    const loadingMessage = document.createElement('div');
+    loadingMessage.classList.add('message', 'bot');
+    loadingMessage.innerHTML = `<div class="message-text"></div>`;
+    loadingMessage.querySelector('.message-text').appendChild(loader);
+    document.getElementById('chatHistory').appendChild(loadingMessage);
+    try {
+        const inputEmbedding = await getEmbedding(inputText);
+        let bestScore = -1, bestAnswer = '';
+        for (const answer of answers) {
+            const answerEmbedding = await getEmbedding(answer);
+            const score = cosineSimilarity(inputEmbedding, answerEmbedding);
+            if (score > bestScore) {
+                bestScore = score;
+                bestAnswer = answer;
+            }
+        }
+        await new Promise(resolve => setTimeout(resolve, calculatePauseDuration(inputText)));
+        addBotMessage(bestAnswer);
+    } catch (error) {
+        console.error(error);
+        addBotMessage("Помилка!");
+    } finally {
+        loadingMessage.remove();
+    }
+}
+function addUserMessage(text) {
+    const chatHistory = document.getElementById('chatHistory');
+    const message = document.createElement('div');
+    message.classList.add('message', 'user');
+    message.innerHTML = `<div class="message-text">${text}</div>`;
+    chatHistory.appendChild(message);
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+function addBotMessage(text) {
+    const chatHistory = document.getElementById('chatHistory');
+    const message = document.createElement('div');
+    message.classList.add('message', 'bot');
+    message.innerHTML = `<div class="message-text"></div>`;
+    chatHistory.appendChild(message);
+    let index = 0;
+    const interval = setInterval(() => {
+        if (index < text.length) {
+            message.querySelector('.message-text').textContent += text[index];
+            index++;
+        } else {
+            clearInterval(interval);
+            const inputField = document.getElementById('inputText');
+            const sendButton = document.querySelector('.send-button');
+            inputField.disabled = false;
+            sendButton.disabled = false;
+            isProcessing = false; 
+            inputField.placeholder = inputField.getAttribute('data-placeholder');
+            inputField.focus(); 
+        }
+    }, 50);
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+async function sendMessage() {
+    if (isProcessing) return; 
+    const inputText = document.getElementById('inputText').value.trim();
+    if (!inputText) return;
+    const inputField = document.getElementById('inputText');
+    const sendButton = document.querySelector('.send-button');
+    inputField.disabled = true;
+    sendButton.disabled = true;
+    isProcessing = true; 
+    inputField.setAttribute('data-placeholder', inputField.placeholder);
+    inputField.placeholder = ''; 
+    addUserMessage(inputText);
+    document.getElementById('inputText').value = '';
+    try {
+        await findBestMatch(inputText); 
+    } catch (error) {
+        console.error(error);
+        addBotMessage("Помилка!");
+    }
+}
+window.addEventListener('scroll', () => {
+    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    const viewportHeight = window.innerHeight;
+    document.querySelectorAll('.appear').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const isVisible = rect.top < viewportHeight && rect.bottom > 0.3 * viewportHeight;
+        el.style.opacity = isVisible ? 1 : 0;
+        el.style.transform = isVisible ? 'translateX(0)' : 'translateX(50px)';
+        el.style.transition = 'opacity 0.4s ease-in-out, transform 0.4s ease-in-out';
+    });
+});
+</script>
+</body>
+</html>
