@@ -332,24 +332,26 @@ model-viewer {
         width: 62.5%;
     }
     .chat-container {
-        width: 90vw;
+        width: calc(100% - 20px);
         height: 60vh;
-        right: 2vw;
-        bottom: 2vh;
+        right: 10px;
+        left: 10px;
+        bottom: 20px;
+        margin: 0 auto;
+        box-sizing: border-box;
     }
     .chat-toggle-button,
     .contact-toggle-button {
-        right: 4vw;
-        width: 15vw;
-        height: 15vw;
-        margin-right: 0;
-        bottom: 4vh;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        bottom: 20px;
     }
     .contact-toggle-button {
-        bottom: calc(4vh + 20vw);
+        bottom: 100px;
     }
     .button-icon {
-        height: 8vw;
+        height: 30px;
     }
     .science-letter {
         font-size: 15vw;
