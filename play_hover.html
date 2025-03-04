@@ -89,7 +89,7 @@
                 currentVideoId = url.pathname.split('/').pop();
                 currentStart = parseInt(link.dataset.start);
                 currentEnd = parseInt(link.dataset.end);
-                player.cueVideoById({
+                player.loadVideoById({
                     videoId: currentVideoId,
                     startSeconds: currentStart,
                     endSeconds: currentEnd
