@@ -710,9 +710,14 @@ document.querySelectorAll('table.appear tr').forEach(tr => {
         player.unMute();
         player.playVideo();
     });
+    // Modified mouseleave handler
     tr.addEventListener('mouseleave', function() {
-        player.pauseVideo();
-        player.seekTo(currentStart);
+        setTimeout(() => {
+            if (!tr.matches(':hover')) {
+                player.pauseVideo();
+                player.seekTo(currentStart);
+            }
+        }, 100);
     });
 });
 </script>
