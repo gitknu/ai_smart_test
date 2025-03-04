@@ -33,6 +33,12 @@
         p {
             font-weight: 500;
         }
+                #player {
+            display: none;
+        }
+        .team-member-row {
+            cursor: pointer;
+        }
         .appear, table {
   flex-direction: column;
   margin-inline: 1vw;
@@ -393,7 +399,7 @@ model-viewer {
             </div>
         </div>
     </header>
-    <main>
+     <main>
         <div class="container">
             <p class="appear">
                 Вітаємо на сторінці проєкту <b><span class="answer">«Теоретичне і прикладне забезпечення розвитку смарт-інфраструктури розумних міст в період війни та післявоєнного відновлення України з урахуванням досвіду держав-членів Європейського Союзу»</span></b> ( <i>керівник д. юрид. наук, проф. Олег Заярний, секція 13 – Економічні перетворення, бізнес, адміністрування та право</i> ).
@@ -433,6 +439,7 @@ model-viewer {
                 </span></a></td></tr>
             </table>
         </div>
+            <div id="player"></div>
     </main>
     <footer>
         <div class="container">
@@ -657,6 +664,60 @@ window.addEventListener('scroll', () => {
         el.style.opacity = isVisible ? 1 : 0;
         el.style.transform = isVisible ? 'translateX(0)' : 'translateX(50px)';
         el.style.transition = 'opacity 0.4s ease-in-out, transform 0.4s ease-in-out';
+    });
+});
+// Add this code at the end of your existing script
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+var player;
+var currentVideoId = '';
+var currentStart = 0;
+var currentEnd = 0;
+
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        height: '0',
+        width: '0',
+        videoId: '',
+        playerVars: {
+            autoplay: 0,
+            controls: 0,
+            modestbranding: 1,
+            rel: 0
+        },
+        events: {
+            'onReady': onPlayerReady
+        }
+    });
+}
+
+function onPlayerReady(event) {
+    event.target.mute();
+}
+
+document.querySelectorAll('table.appear tr').forEach(tr => {
+    const link = tr.querySelector('a[href^="https://youtu.be/"]');
+    if (!link) return;
+    tr.classList.add('team-member-row');
+    tr.addEventListener('mouseenter', function() {
+        const url = new URL(link.href);
+        currentVideoId = url.pathname.split('/').pop();
+        currentStart = parseInt(link.dataset.start);
+        currentEnd = parseInt(link.dataset.end);
+        player.loadVideoById({
+            videoId: currentVideoId,
+            startSeconds: currentStart,
+            endSeconds: currentEnd
+        });
+        player.unMute();
+        player.playVideo();
+    });
+    tr.addEventListener('mouseleave', function() {
+        player.pauseVideo();
+        player.seekTo(currentStart);
     });
 });
 </script>
