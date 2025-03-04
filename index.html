@@ -144,6 +144,10 @@ model-viewer {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
         }
         footer {
             background: black;
@@ -295,13 +299,7 @@ model-viewer {
 .loader {
             display: none;
         }
-@media (min-aspect-ratio: 1/1) and (min-width: 639px) {
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-    .container > .appear {
+    .container > table {
         flex: 0 0 48%;
         margin: 5vh 0;
     }
