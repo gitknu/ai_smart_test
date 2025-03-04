@@ -2,78 +2,115 @@
 <html>
 <head>
     <style>
-        #hoverElement {
-            padding: 20px;
-            background: #f0f0f0;
-            width: 200px;
-            text-align: center;
-            cursor: pointer;
+        .appear td {
+            padding: 10px;
+            vertical-align: middle;
         }
-
+        .appear img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .answer {
+            padding-left: 20px;
+        }
         #player {
             position: absolute;
             width: 0;
             height: 0;
             overflow: hidden;
         }
+        .team-member-row {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div id="hoverElement">Hover over me to play 5s audio</div>
+        <table class="appear">
+                <tr>
+                До нашої команди входять чудові люди, справжні фахівці своєї справи, а саме:</tr>
+            <tr><td><a href="https://youtu.be/qR4oAH_avwo" target="_blank" data-start="10" data-end="20"><img src="https://gitknu.github.io/ai_smart_test/imgs/zayarniy.jpg"></a><td/><td><a href="https://youtu.be/qR4oAH_avwo" target="_blank" data-start="10" data-end="20">
+                <span class="answer"><b><i>Олег Заярний</i></b><br>lorem ipsum dolor sit amet, consectetur adipiscing elit. sit amet, consectetur adipiscing elit 
+                        </span></a></td></tr>
+            <tr><td><a href="https://youtu.be/fT-lkxmZO_8" target="_blank" data-start="10" data-end="20"><img src="https://gitknu.github.io/ai_smart_test/imgs/oryshuk.jpg"></a><td/><td><a href="https://youtu.be/fT-lkxmZO_8" target="_blank" data-start="10" data-end="20">
+                <span class="answer"><b><i>Василь Орищук</i></b><br>lorem ipsum dolor sit amet, consectetur adipiscing elit. sit amet, consectetur adipiscing elit</span>
+            </span></a></td></tr>
+            <tr><td><a href="https://youtu.be/1bzyZJnNMgQ" target="_blank" data-start="10" data-end="20"><img src="https://gitknu.github.io/ai_smart_test/imgs/krak.jpg"></a><td/><td><a href="https://youtu.be/1bzyZJnNMgQ" data-start="10" data-end="20">
+                <span class="answer"><b><i>Юрій Крак</i></b><br>завідувач кафедри теоретичної кібернетики, понад 20 років займається розробкою АІ технологій
+            </span></a></td></tr>
+</table>
+<table class="appear">
+            <tr><td><a href="https://youtu.be/gQojGqfs4Ok" target="_blank" data-start="10" data-end="20"><img src="https://gitknu.github.io/ai_smart_test/imgs/pochaievets.jpg"></a><td/><td><a href="https://youtu.be/gQojGqfs4Ok" target="_blank" data-start="10" data-end="20">
+                <span class="answer"><b><i>Олена Почаєвець</i></b><br> lorem ipsum dolor sit amet, consectetur adipiscing elit. sit amet, consectetur adipiscing elit
+            </span></a></td></tr>
+            <tr><td><a href="https://youtu.be/JcgHfiabsqs" target="_blank" data-start="10" data-end="20"><img src="https://gitknu.github.io/ai_smart_test/imgs/ostapenko.jpg"></a><td/><td><a href="https://youtu.be/JcgHfiabsqs" target="_blank" data-start="10" data-end="20">
+                <span class="answer"><b><i>Роман Остапенко</i></b><br> Голова Ради молодих вчених КНУТШ. lorem ipsum dolor sit amet, consectetur adipiscing elit amet
+</span></a></td></tr>
+            <tr><td><a href="https://youtu.be/PC4GsyAJIV4" target="_blank" data-start="10" data-end="20"><img src="https://gitknu.github.io/ai_smart_test/imgs/katerynych.jpg"></a><td/><td><a href="https://youtu.be/PC4GsyAJIV4" target="_blank" data-start="10" data-end="20">
+                <span class="answer"><b><i>Петро Катеринич</i></b><br> lorem ipsum dolor sit amet, consectetur adipiscing elit. sit amet, consectetur adipiscing elit
+</span></a></td></tr></table>
+<table class="appear">
+            <tr><td><a href="https://google.com" target="_blank"><img src="https://gitknu.github.io/ai_smart_test/imgs/karlash.jpg"></a><td/><td><a href="https://google.com" target="_blank">
+                <span class="answer"><b><i>Богдан Карлаш</i></b><br> lorem ipsum dolor sit amet, consectetur adipiscing elit. sit amet, consectetur adipiscing elit
+</span></a></td></tr>
+            <tr><td><a href="https://youtu.be/_ZuJ7H4bFsg" target="_blank" data-start="10" data-end="20"><img src="https://gitknu.github.io/ai_smart_test/imgs/chuian.jpg"></a><td/><td><a href="https://youtu.be/_ZuJ7H4bFsg" target="_blank" data-start="10" data-end="20">
+                <span class="answer"><b><i>Андрій Чуян</i></b><br>від жовтня 2021 займається АІ технологіями, раніше екскурсовод у Software and Computer Museum
+                </span></a></td></tr>
+                <tr><td><a href="https://youtu.be/Gr_X2LejEiY" target="_blank" data-start="10" data-end="20"><img src="https://gitknu.github.io/ai_smart_test/imgs/tesyolkina.jpg"></a><td/><td><a href="https://youtu.be/Gr_X2LejEiY" target="_blank" data-start="10" data-end="20">
+                <span class="answer"><b><i>Тетяна Тесьолкіна</i></b><br>lorem ipsum dolor sit amet, consectetur adipiscing elit. sit amet, consectetur adipiscing elit 
+                </span></a></td></tr>
+            </table>
     <div id="player"></div>
-
     <script>
-        // Load YouTube IFrame API
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
         var player;
+        var currentVideoId = '';
+        var currentStart = 0;
+        var currentEnd = 0;
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
                 height: '0',
                 width: '0',
-                videoId: 'Gr_X2LejEiY',
+                videoId: '',
                 playerVars: {
-                    start: 134,
-                    end: 139,
                     autoplay: 0,
                     controls: 0,
                     modestbranding: 1,
                     rel: 0
                 },
                 events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
+                    'onReady': onPlayerReady
                 }
             });
         }
-
         function onPlayerReady(event) {
-            event.target.mute(); // Start muted to bypass autoplay restrictions
+            event.target.mute();
         }
-
-        function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.ENDED) {
-                event.target.seekTo(134);
-            }
-        }
-
-        // Hover handling
-        const hoverElement = document.getElementById('hoverElement');
-        let playbackTimeout;
-
-        hoverElement.addEventListener('mouseenter', () => {
-            player.unMute();
-            player.seekTo(134);
-            player.playVideo();
-        });
-
-        hoverElement.addEventListener('mouseleave', () => {
-            player.pauseVideo();
-            player.seekTo(134);
-            clearTimeout(playbackTimeout);
+        document.querySelectorAll('table.appear tr').forEach(tr => {
+            const link = tr.querySelector('a[href^="https://youtu.be/"]');
+            if (!link) return;
+            tr.classList.add('team-member-row');
+            tr.addEventListener('mouseenter', function() {
+                const url = new URL(link.href);
+                currentVideoId = url.pathname.split('/').pop();
+                currentStart = parseInt(link.dataset.start);
+                currentEnd = parseInt(link.dataset.end);
+                player.cueVideoById({
+                    videoId: currentVideoId,
+                    startSeconds: currentStart,
+                    endSeconds: currentEnd
+                });
+                player.unMute();
+                player.playVideo();
+            });
+            tr.addEventListener('mouseleave', function() {
+                player.pauseVideo();
+                player.seekTo(currentStart);
+            });
         });
     </script>
 </body>
