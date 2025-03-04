@@ -43,6 +43,11 @@
     transition: transform 0.2s ease;
     display: inline-block;
 }
+.no-scroll {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
 @media (hover: hover) {
     .audio-trigger:hover {
         transform: scale(1.025);
@@ -184,20 +189,23 @@ model-viewer {
         .close-chat-button:hover {
             color: #ccc;
         }
-        .chat-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 500px;
-            height: 500px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            display: none;
-            flex-direction: column;
-            z-index: 1001;
-            transition: all 0.3s ease;
-        }
+.chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 500px;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: none;
+    flex-direction: column;
+    z-index: 1001;
+    transition: all 0.3s ease;
+    transform: translateX(0); /* Add this */
+    overflow: hidden; /* Add this */
+    will-change: transform; /* Add this to prevent layout shifts */
+}
 .chat-toggle-button,
 .contact-toggle-button {
     right: 20px;
@@ -339,6 +347,9 @@ model-viewer {
         bottom: 20px;
         margin: 0 auto;
         box-sizing: border-box;
+        transform: translateX(0); /* Add this */
+        overflow: hidden; /* Add this */
+        will-change: transform; /* Add this */
     }
     .chat-toggle-button,
     .contact-toggle-button {
@@ -534,13 +545,18 @@ document.querySelector('.chat-toggle-button').addEventListener('click', () => {
     if (!pipe && !embeddingsLoading) {
         startEllipsisAnimation();
         initializeEmbeddings().finally(stopEllipsisAnimation);
-    } else if (pipe) openChat();
+    } else if (pipe) {
+        openChat();
+        document.body.classList.add('no-scroll'); // Add this
+    }
 });
+
 document.querySelector('.close-chat-button').addEventListener('click', () => {
     const chat = document.querySelector('.chat-container');
     const toggleButton = document.querySelector('.chat-toggle-button');
     chat.style.display = 'none';
     toggleButton.style.display = 'flex';
+    document.body.classList.remove('no-scroll'); // Add this
 });
 document.getElementById('inputText').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
