@@ -43,8 +43,10 @@
     transition: transform 0.2s ease;
     display: inline-block;
 }
-.audio-trigger:hover {
-    transform: scale(1.025);
+@media (hover: hover) {
+    .audio-trigger:hover {
+        transform: scale(1.025);
+    }
 }
         .appear, table {
   flex-direction: column;
@@ -700,7 +702,11 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
     event.target.mute();
 }
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
 document.querySelectorAll('.audio-trigger').forEach(span => {
+    if (isMobile()) return; // Skip mobile devices
     const link = span.closest('a[href^="https://youtu.be/"]');
     if (!link) return;
     span.style.cursor = 'pointer';
