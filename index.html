@@ -43,35 +43,37 @@
     transition: transform 0.2s ease;
     display: inline-block;
 }
-
-
-table#results tr:first-child td {
+#results {
+    width: 100%;
+    margin: 5vh 0;
+}
+.results-header {
     width: 100%;
     text-align: center;
     padding: 20px 0;
     font-weight: bold;
 }
-
-table#results td {
-    width: 13% !important;
-    padding: 15px;
-    vertical-align: top;
+.results-row {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 20px;
 }
-
-table#results img {
+.result-item {
+    flex: 1;
+    min-width: 300px;
+    max-width: 30%;
+    padding: 15px;
+    text-align: center;
+}
+.result-item img {
     max-width: 200px;
     height: auto;
     margin: 0 auto;
     display: block;
-    border-radius: 0; /* Remove circle crop for results images */
+    border-radius: 0;
 }
-
-table#results .answer {
-    text-align: center;
-    display: block;
-    margin-top: 15px;
-}
-
 @media (hover: hover) {
     .audio-trigger:hover {
         transform: scale(1.025);
@@ -484,37 +486,31 @@ model-viewer {
             <p class="appear">
                 Вітаємо на сторінці проєкту <b><span class="answer">«Теоретичне і прикладне забезпечення розвитку смарт-інфраструктури розумних міст в період війни та післявоєнного відновлення України з урахуванням досвіду держав-членів Європейського Союзу»</span></b> ( <i>керівник д. юрид. наук, проф. Олег Заярний, секція 13 – Економічні перетворення, бізнес, адміністрування та право</i> ).
             </p>
-<table class="appear" id="results">
-    <tr>
-        <td colspan="6">Деякі з результатів нашої роботи буде наведено нижче:</td>
-    </tr>
-    <tr>
-        <td>
+<div class="appear" id="results">
+    <div class="results-header">
+        <div>Деякі з результатів нашої роботи буде наведено нижче:</div>
+    </div>
+    <div class="results-row">
+        <div class="result-item">
             <a href="https://youtu.be/qR4oAH_avwo" target="_blank">
                 <img src="https://gitknu.github.io/ai_smart_test/imgs/zayarniy.jpg">
             </a>
-        </td>
-        <td>
             <span class="answer"><b><i>Публікації</i> 📚️</b><br>lorem ipsum dolor sit amet, consectetur adipiscing elit. sit amet, consectetur adipiscing elit</span>
-        </td>
-        <td>
+        </div>
+        <div class="result-item">
             <a href="https://youtu.be/qR4oAH_avwo" target="_blank">
                 <img src="https://gitknu.github.io/ai_smart_test/imgs/zayarniy.jpg">
             </a>
-        </td>
-        <td>
             <span class="answer"><b><i>Програми</i> 🖥️</b><br>lorem ipsum dolor sit amet, consectetur adipiscing elit. sit amet, consectetur adipiscing elit</span>
-        </td>
-        <td>
+        </div>
+        <div class="result-item">
             <a href="https://youtu.be/qR4oAH_avwo" target="_blank">
                 <img src="https://gitknu.github.io/ai_smart_test/imgs/zayarniy.jpg">
             </a>
-        </td>
-        <td>
             <span class="answer"><b><i>Впровадження</i> 🔧</b><br>lorem ipsum dolor sit amet, consectetur adipiscing elit. sit amet, consectetur adipiscing elit</span>
-        </td>
-    </tr>
-</table>
+        </div>
+    </div>
+</div>
         </div>
             <div id="player"></div>
     </main>
