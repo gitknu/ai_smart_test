@@ -1,17 +1,10 @@
 <html>
 <head>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            perspective: 1000px;
-        }
         .monitor {
-            position: relative;
+            position: absolute;
+            top: 50px;
+            left: 50px;
             width: 300px;
             height: 200px;
             background-color: #555;
@@ -50,17 +43,17 @@
             border-radius: 10px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), inset 0 -5px 10px rgba(255, 255, 255, 0.1);
         }
- .keyboard {
+        .keyboard {
             position: absolute;
-            top: 460px;
-            left: 50%;
-            width: 280px;
-            height: 60px;
-            transform: translateX(-50%) rotateX(40deg) rotateZ(0deg);
+            top: 330px; 
+            left: 50px;
+            width: 300px;
+            height: 65px;
+            transform: perspective(500px) rotateX(40deg) skewX(0deg); 
             transform-style: preserve-3d;
             background: linear-gradient(to bottom, #444 60%, #333 100%);
-            border-radius: 8px 8px 12px 12px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-radius: 10px 10px 14px 14px;
+            box-shadow: 0 7px 0px rgba(0,0,0,1); 
         }
         .keyboard::before {
             content: '';
@@ -71,13 +64,13 @@
             bottom: 4px;
             background: linear-gradient(to bottom, #333 40%, #222 100%);
             border-radius: 5px 5px 8px 8px;
-            transform: translateZ(-2px);
+            transform: translateZ(-4px);
         }
         .buttons {
             position: absolute;
-            top: 20px; 
-            left: 50%;
-            transform: translate(-50%, 0) rotateX(20deg);
+            top: 22px; 
+            left: 51%;
+            transform: translate(-50%, 0) rotateX(0deg);
             display: flex;
             gap: 10px;
             transform-style: preserve-3d;
@@ -88,9 +81,8 @@
             height: 40px;
             background: linear-gradient(to bottom, #555 10%, #444 90%);
             border-radius: 15px;
-            transform: translateZ(10px); 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3),
-                        inset 0 -2px 2px rgba(255,255,255,0.1);
+            transform: translateZ(15px); 
+            box-shadow: 0 2px 2px rgba(0,0,0,1); 
             transition: transform 0.2s, background 0.2s;
             cursor: pointer;
         }
@@ -99,18 +91,18 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) rotateX(0); /* Adjusted for better alignment */
+            transform: translate(-50%, -50%) rotateX(0);
             color: #fff;
             font-family: Arial, sans-serif;
             font-size: 14px;
             text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
         .button:hover {
-            transform: translateZ(15px); /* Enhanced hover effect */
+            transform: translateZ(14px); 
             background: linear-gradient(to bottom, #666 10%, #555 90%);
         }
         .button:active {
-            transform: translateZ(5px);
+            transform: translateZ(10px); 
             background: linear-gradient(to bottom, #444 10%, #333 90%);
         }
     </style>
