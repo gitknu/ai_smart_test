@@ -3,87 +3,87 @@
     <style>
         .monitor {
             position: absolute;
-            top: 5vh;
-            left: 5vw;
-            width: 20vw;
-            height: 20vh;
+            top: 5vmin;
+            left: 5vmin;
+            width: 20vmin;
+            height: 20vmin;
             background-color: #555;
-            border-radius: 2vh;
-            box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.3), 0 0 5vh rgba(0, 0, 0, 0.2); 
+            border-radius: 2vmin;
+            box-shadow: 0 1vmin 2vmin rgba(0, 0, 0, 0.3), 0 0 5vmin rgba(0, 0, 0, 0.2);
             transform-style: preserve-3d;
         }
         .screen {
             position: absolute;
-            top: 1.7vh;
-            left: 1.1vw;
-            width: 17vw;
-            height: 15vh;
+            top: 8.5%;
+            left: 5.5%;
+            width: 85%;
+            height: 75%;
             background-color: #000;
-            border-radius: 1.5vh;
-            box-shadow: inset 0 0 2vh rgba(255, 255, 255, 0.3); 
-            border: 0.5vh solid #444; 
+            border-radius: 1.5vmin;
+            box-shadow: inset 0 0 2vmin rgba(255, 255, 255, 0.3);
+            border: 0.5vmin solid #444;
             overflow: hidden;
         }
         .stand {
             position: absolute;
-            top: 20vh;
-            left: 8vw;
-            width: 4vw;
-            height: 6vh;
+            top: 100%;
+            left: 40%;
+            width: 20%;
+            height: 30%;
             background: linear-gradient(to bottom, #666, #444);
-            border-radius: 1vh 1vh 0 0;
-            box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.3), inset 0 -0.5vh 1vh rgba(255, 255, 255, 0.1); 
+            border-radius: 1vmin 1vmin 0 0;
+            box-shadow: 0 1vmin 2vmin rgba(0, 0, 0, 0.3), inset 0 -0.5vmin 1vmin rgba(255, 255, 255, 0.1);
         }
         .base {
             position: absolute;
-            top: 26vh;
-            left: 3vw;
-            width: 14vw;
-            height: 2vh;
+            top: 130%;
+            left: 15%;
+            width: 70%;
+            height: 10%;
             background: linear-gradient(to bottom, #666, #444);
-            border-radius: 1vh;
-            box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.3), inset 0 -0.5vh 1vh rgba(255, 255, 255, 0.1); 
+            border-radius: 1vmin;
+            box-shadow: 0 1vmin 2vmin rgba(0, 0, 0, 0.3), inset 0 -0.5vmin 1vmin rgba(255, 255, 255, 0.1);
         }
         .keyboard {
             position: absolute;
-            top: 33vh;
-            left: 5vw;
-            width: 20vw;
-            height: 6.5vh;
-            transform: perspective(50vh) rotateX(40deg) skewX(0deg);
+            top: 33vmin;
+            left: 5vmin;
+            width: 20vmin;
+            height: 6.5vmin;
+            transform: perspective(50vmin) rotateX(40deg) skewX(0deg);
             transform-style: preserve-3d;
             background: linear-gradient(to bottom, #444 60%, #333 100%);
-            border-radius: 1vh 1vh 1.4vh 1.4vh;
-            box-shadow: 0 0.7vh 0 rgba(0,0,0,1); 
+            border-radius: 1vmin 1vmin 1.4vmin 1.4vmin;
+            box-shadow: 0 0.7vmin 0 rgba(0,0,0,1);
         }
         .keyboard::before {
             content: '';
             position: absolute;
-            top: 0.4vh;
-            left: 0.4vw;
-            right: 0.4vw;
-            bottom: 0.4vh;
+            top: 0.4vmin;
+            left: 0.4vmin;
+            right: 0.4vmin;
+            bottom: 0.4vmin;
             background: linear-gradient(to bottom, #333 40%, #222 100%);
-            border-radius: 0.5vh 0.5vh 0.8vh 0.8vh;
-            transform: translateZ(-0.4vh);
+            border-radius: 0.5vmin 0.5vmin 0.8vmin 0.8vmin;
+            transform: translateZ(-0.4vmin);
         }
         .buttons {
             position: absolute;
-            top: 2.2vh;
+            top: 2.2vmin;
             left: 51%;
             transform: translate(-50%, 0) rotateX(0deg);
             display: flex;
-            gap: 1vw;
+            gap: 1vmin;
             transform-style: preserve-3d;
         }
         .button {
             position: relative;
-            width: 5vw;
-            height: 4vh;
+            width: 5vmin;
+            height: 4vmin;
             background: linear-gradient(to bottom, #555 10%, #444 90%);
-            border-radius: 1.5vh;
-            transform: translateZ(1.5vh);
-            box-shadow: 0 0.2vh 0.2vh rgba(0,0,0,1); 
+            border-radius: 1.5vmin;
+            transform: translateZ(1.5vmin);
+            box-shadow: 0 0.2vmin 0.2vmin rgba(0,0,0,1);
             transition: transform 0.2s, background 0.2s;
             cursor: pointer;
         }
@@ -95,15 +95,15 @@
             transform: translate(-50%, -50%) rotateX(0);
             color: #fff;
             font-family: Arial, sans-serif;
-            font-size: 1.4vh;
-            text-shadow: 0 0.1vh 0.2vh rgba(0,0,0,0.5); 
+            font-size: 1.4vmin;
+            text-shadow: 0 0.1vmin 0.2vmin rgba(0,0,0,0.5);
         }
         .button:hover {
-            transform: translateZ(1.4vh);
+            transform: translateZ(1.4vmin);
             background: linear-gradient(to bottom, #666 10%, #555 90%);
         }
         .button:active {
-            transform: translateZ(1vh);
+            transform: translateZ(1vmin);
             background: linear-gradient(to bottom, #444 10%, #333 90%);
         }
     </style>
@@ -133,13 +133,15 @@
         const paddleWidth = 40;
         let aiPaddleX = (canvas.width - paddleWidth) / 2;
         let playerPaddleX = (canvas.width - paddleWidth) / 2;
-        let ballX = canvas.width/2;
-        let ballY = canvas.height/2;
+        let ballX = playerPaddleX + paddleWidth/2;
+        let ballY = canvas.height - paddleHeight - 20;
         let ballSpeedX = 1;
-        let ballSpeedY = 1;
+        let ballSpeedY = -1;
         let playerScore = 0;
         let aiScore = 0;
         let gameRunning = false;
+        let gameEnded = false;
+        let autoStartTimeout;
         const scanlines = document.createElement('canvas');
         scanlines.width = canvas.width;
         scanlines.height = canvas.height;
@@ -150,15 +152,24 @@
         }
         let leftPressed = false;
         let rightPressed = false;
+        autoStartTimeout = setTimeout(() => {
+            if(!gameRunning && !gameEnded) toggleGame();
+        }, 5000);
         document.getElementById('leftBtn').addEventListener('mousedown', () => moveLeft(true));
         document.getElementById('leftBtn').addEventListener('mouseup', () => moveLeft(false));
         document.getElementById('rightBtn').addEventListener('mousedown', () => moveRight(true));
         document.getElementById('rightBtn').addEventListener('mouseup', () => moveRight(false));
-        document.getElementById('enterBtn').addEventListener('click', toggleGame);
+        document.getElementById('enterBtn').addEventListener('click', () => {
+            clearTimeout(autoStartTimeout);
+            toggleGame();
+        });
         document.addEventListener('keydown', (e) => {
             if(e.key === 'ArrowLeft') moveLeft(true);
             if(e.key === 'ArrowRight') moveRight(true);
-            if(e.key === 'Enter') toggleGame();
+            if(e.key === 'Enter') {
+                clearTimeout(autoStartTimeout);
+                toggleGame();
+            }
         });
         document.addEventListener('keyup', (e) => {
             if(e.key === 'ArrowLeft') moveLeft(false);
@@ -167,65 +178,75 @@
         function moveLeft(pressed) { leftPressed = pressed; }
         function moveRight(pressed) { rightPressed = pressed; }
         function toggleGame() {
+            if(gameEnded) {
+                playerScore = 0;
+                aiScore = 0;
+                gameEnded = false;
+                resetBall();
+            }
             gameRunning = !gameRunning;
             if(gameRunning) gameLoop();
         }
         function gameLoop() {
-            if(!gameRunning) return;
+            if(!gameRunning || gameEnded) return;
             if(leftPressed) playerPaddleX -= 5;
             if(rightPressed) playerPaddleX += 5;
             playerPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, playerPaddleX));
             aiPaddleX += (ballX - (aiPaddleX + paddleWidth/2)) * 0.04;
-            if(Math.random() < 0.02) aiPaddleX += (Math.random() - 0.5) * 20; 
+            if(Math.random() < 0.02) aiPaddleX += (Math.random() - 0.5) * 20;
             aiPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, aiPaddleX));
             ballX += ballSpeedX;
             ballY += ballSpeedY;
             if(ballX < 0 || ballX > canvas.width) ballSpeedX = -ballSpeedX;
-            if(ballY <= paddleHeight && 
-               ballX > aiPaddleX && 
-               ballX < aiPaddleX + paddleWidth) {
+            if(ballY <= paddleHeight && ballX > aiPaddleX && ballX < aiPaddleX + paddleWidth) {
                 ballSpeedY = -ballSpeedY;
             }
-            if(ballY >= canvas.height - paddleHeight && 
-               ballX > playerPaddleX && 
-               ballX < playerPaddleX + paddleWidth) {
+            if(ballY >= canvas.height - paddleHeight && ballX > playerPaddleX && ballX < playerPaddleX + paddleWidth) {
                 ballSpeedY = -ballSpeedY;
             }
             if(ballY < 0) {
                 playerScore++;
+                if(playerScore >= 5) gameEnded = true;
                 resetBall();
             }
             if(ballY > canvas.height) {
                 aiScore++;
+                if(aiScore >= 5) gameEnded = true;
                 resetBall();
             }
             draw();
             requestAnimationFrame(gameLoop);
         }
         function resetBall() {
-            ballX = canvas.width/2;
-            ballY = canvas.height/2;
+            ballX = playerPaddleX + paddleWidth/2;
+            ballY = canvas.height - paddleHeight - 20;
             ballSpeedX = 1 * (Math.random() > 0.5 ? 1 : -1);
-            ballSpeedY = 1 * (Math.random() > 0.5 ? 1 : -1);
+            ballSpeedY = -1;
         }
         function draw() {
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'rgba(0, 255, 0, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#0f0';
-            ctx.fillRect(aiPaddleX, 0, paddleWidth, paddleHeight);
-            ctx.fillRect(playerPaddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-            ctx.beginPath();
-            ctx.arc(ballX, ballY, 3, 0, Math.PI*2);
-            ctx.fillStyle = '#0f0';
-            ctx.fill();
-            ctx.font = '12px "Courier New", monospace';
-            ctx.fillStyle = '#0f0';
-            ctx.textAlign = 'center';
-            ctx.fillText(`PLAYER: ${playerScore}`, canvas.width/2, canvas.height - 10);
-            ctx.fillText(`AI: ${aiScore}`, canvas.width/2, 20);
+            if(!gameEnded) {
+                ctx.fillStyle = '#0f0';
+                ctx.fillRect(aiPaddleX, 0, paddleWidth, paddleHeight);
+                ctx.fillRect(playerPaddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+                ctx.beginPath();
+                ctx.arc(ballX, ballY, 3, 0, Math.PI*2);
+                ctx.fill();
+                ctx.font = '12px "Courier New", monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText(`USER: ${playerScore}`, canvas.width/2, canvas.height - 10);
+                ctx.fillText(`AI: ${aiScore}`, canvas.width/2, 20);
+            }
             ctx.drawImage(scanlines, 0, 0);
+            if(gameEnded) {
+                ctx.font = '12px "Courier New", monospace';
+                ctx.fillStyle = '#0f0';
+                ctx.fillText('Press Enter', canvas.width/2, canvas.height/2 - 10);
+                ctx.fillText('to play', canvas.width/2, canvas.height/2 + 10);
+            }
             ctx.imageSmoothingEnabled = false;
         }
         draw();
