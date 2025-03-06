@@ -467,8 +467,8 @@ model-viewer {
 .keyboard {
     position: relative;
     width: 70%;
-    height: 10vh; /* Use viewport height for consistent sizing */
-    margin-top: 5vh; /* Adjusted for better spacing */
+    height: clamp(8vh, 10vw, 12vh); 
+    margin-top: clamp(5vh, 8vw, 10vh); /* Responsive margin */
     transform: perspective(50vmin) rotateX(40deg) skewX(0deg);
     transform-style: preserve-3d;
     background: linear-gradient(#444 60%, #333 100%);
@@ -493,15 +493,15 @@ model-viewer {
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
-    gap: 2vmin; /* Use vmin for consistent spacing */
-    width: 80%; /* Adjusted for better button sizing */
+    gap: clamp(1vmin, 2vw, 3vmin); /* Responsive gap */
+    width: 80%;
     justify-content: center;
 }
 
 .button {
     position: relative;
-    width: 10vmin; /* Use vmin for proportional sizing */
-    height: 6vmin; /* Use vmin for proportional sizing */
+    width: clamp(8vmin, 12vw, 15vmin); /* Responsive width */
+    height: clamp(3vmin, 5vw, 6vmin); /* Responsive height */
     background: linear-gradient(#555 10%, #444 90%);
     border-radius: 1.5vmin;
     transform: translateZ(1.5vmin);
@@ -509,7 +509,7 @@ model-viewer {
 }
 
 .button::after {
-     font: 2vmin Arial, sans-serif; /* Use vmin for proportional font size */
+     font: clamp(1.5vmin, 2vw, 2.5vmin) Arial, sans-serif; 
     content: attr(data-label);
     position: absolute;
     top: 50%;
