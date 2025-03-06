@@ -17,5 +17,64 @@
 <body>
     <div class="monitor"><div class="screen"><canvas id="gameCanvas"></canvas></div><div class="stand"></div><div class="base"></div></div>
     <div class="keyboard"><div class="buttons"><div class="button" data-label="<" id="leftBtn"></div><div class="button" data-label=">" id="rightBtn"></div><div class="button" data-label="Enter" id="enterBtn"></div></div></div>
+    <script>
+        const canvas = document.getElementById('gameCanvas'), ctx = canvas.getContext('2d'), screenDiv = document.querySelector('.screen');
+        const paddleHeight = 8, paddleWidth = 40;
+        let aiPaddleX = (canvas.width - paddleWidth) / 2, playerPaddleX = (canvas.width - paddleWidth) / 2, ballX = playerPaddleX + paddleWidth / 2, ballY = canvas.height - paddleHeight - 20, ballSpeedX = 1, ballSpeedY = -1, playerScore = 0, aiScore = 0, gameRunning = false, gameEnded = false, autoStartTimeout, leftPressed = false, rightPressed = false;
+        const scanlines = document.createElement('canvas'), scanCtx = scanlines.getContext('2d');
+        scanlines.width = canvas.width; scanlines.height = canvas.height;
+        scanCtx.fillStyle = 'rgba(0, 255, 0, 0.05)';
+        for (let y = 0; y < scanlines.height; y += 2) scanCtx.fillRect(0, y, scanlines.width, 1);
+        const leftBtn = document.getElementById('leftBtn'), rightBtn = document.getElementById('rightBtn'), enterBtn = document.getElementById('enterBtn');
+        leftBtn.addEventListener('mousedown', () => leftPressed = true); leftBtn.addEventListener('mouseup', () => leftPressed = false);
+        leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); leftPressed = true; }); leftBtn.addEventListener('touchend', (e) => { e.preventDefault(); leftPressed = false; });
+        rightBtn.addEventListener('mousedown', () => rightPressed = true); rightBtn.addEventListener('mouseup', () => rightPressed = false);
+        rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); rightPressed = true; }); rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); rightPressed = false; });
+        enterBtn.addEventListener('click', () => { clearTimeout(autoStartTimeout); toggleGame(); });
+        enterBtn.addEventListener('touchend', (e) => { e.preventDefault(); clearTimeout(autoStartTimeout); toggleGame(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') leftPressed = true; if (e.key === 'ArrowRight') rightPressed = true; if (e.key === 'Enter') { clearTimeout(autoStartTimeout); toggleGame(); } });
+        document.addEventListener('keyup', (e) => { if (e.key === 'ArrowLeft') leftPressed = false; if (e.key === 'ArrowRight') rightPressed = false; });
+        function toggleGame() { if (gameEnded) { playerScore = 0; aiScore = 0; gameEnded = false; resetBall(); } gameRunning = !gameRunning; if (gameRunning) gameLoop(); }
+        function gameLoop() {
+            if (!gameRunning || gameEnded) return;
+            playerPaddleX += (leftPressed ? -5 : 0) + (rightPressed ? 5 : 0);
+            playerPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, playerPaddleX));
+            aiPaddleX += (ballX - (aiPaddleX + paddleWidth / 2)) * 0.04 + (Math.random() < 0.02 ? (Math.random() - 0.5) * 20 : 0);
+            aiPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, aiPaddleX));
+            ballX += ballSpeedX; ballY += ballSpeedY;
+            if (ballX < 0 || ballX > canvas.width) ballSpeedX = -ballSpeedX;
+            if (ballY <= paddleHeight && ballX > aiPaddleX && ballX < aiPaddleX + paddleWidth) ballSpeedY = -ballSpeedY;
+            if (ballY >= canvas.height - paddleHeight && ballX > playerPaddleX && ballX < playerPaddleX + paddleWidth) ballSpeedY = -ballSpeedY;
+            if (ballY < 0) { playerScore++; if (playerScore >= 5) gameEnded = true; resetBall(); }
+            if (ballY > canvas.height) { aiScore++; if (aiScore >= 5) gameEnded = true; resetBall(); }
+            draw(); requestAnimationFrame(gameLoop);
+        }
+        function resetBall() { ballX = playerPaddleX + paddleWidth / 2; ballY = canvas.height - paddleHeight - 20; ballSpeedX = 1 * (Math.random() > 0.5 ? 1 : -1); ballSpeedY = -1; }
+        function draw() {
+            ctx.fillStyle = 'black'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(0, 255, 0, 0.1)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if (!gameEnded) {
+                ctx.fillStyle = '#0f0';
+                ctx.fillRect(aiPaddleX, 0, paddleWidth, paddleHeight);
+                ctx.fillRect(playerPaddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+                ctx.beginPath(); ctx.arc(ballX, ballY, 3, 0, Math.PI * 2); ctx.fill();
+                ctx.font = `${Math.min(12, canvas.width / 10)}px "Courier New", monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText(`USER: ${playerScore}`, canvas.width / 2, canvas.height - 10);
+                ctx.fillText(`AI: ${aiScore}`, canvas.width / 2, 20);
+            }
+            ctx.drawImage(scanlines, 0, 0);
+            if (gameEnded) {
+                ctx.font = `${Math.min(12, canvas.width / 10)}px "Courier New", monospace`;
+                ctx.fillStyle = '#0f0';
+                ctx.fillText('Press Enter', canvas.width / 2, canvas.height / 2 - 10);
+                ctx.fillText('to play', canvas.width / 2, canvas.height / 2 + 10);
+            }
+            ctx.imageSmoothingEnabled = false;
+        }
+        function resizeCanvas() { canvas.width = screenDiv.clientWidth; canvas.height = screenDiv.clientHeight; resetBall(); draw(); }
+        resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+        autoStartTimeout = setTimeout(() => { if (!gameRunning && !gameEnded) toggleGame(); }, 5000);
+    </script>
 </body>
 </html>
