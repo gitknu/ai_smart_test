@@ -156,11 +156,35 @@
         for (let y = 0; y < scanlines.height; y += 2) {
             scanCtx.fillRect(0, y, scanlines.width, 1);
         }
-        document.getElementById('leftBtn').addEventListener('mousedown', () => moveLeft(true));
-        document.getElementById('leftBtn').addEventListener('mouseup', () => moveLeft(false));
-        document.getElementById('rightBtn').addEventListener('mousedown', () => moveRight(true));
-        document.getElementById('rightBtn').addEventListener('mouseup', () => moveRight(false));
-        document.getElementById('enterBtn').addEventListener('click', () => {
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        const enterBtn = document.getElementById('enterBtn');
+        leftBtn.addEventListener('mousedown', () => moveLeft(true));
+        leftBtn.addEventListener('mouseup', () => moveLeft(false));
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveLeft(true);
+        });
+        leftBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            moveLeft(false);
+        });
+        rightBtn.addEventListener('mousedown', () => moveRight(true));
+        rightBtn.addEventListener('mouseup', () => moveRight(false));
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveRight(true);
+        });
+        rightBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            moveRight(false);
+        });
+        enterBtn.addEventListener('click', () => {
+            clearTimeout(autoStartTimeout);
+            toggleGame();
+        });
+        enterBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
             clearTimeout(autoStartTimeout);
             toggleGame();
         });
@@ -193,7 +217,6 @@
             if (leftPressed) playerPaddleX -= 5;
             if (rightPressed) playerPaddleX += 5;
             playerPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, playerPaddleX));
-
             aiPaddleX += (ballX - (aiPaddleX + paddleWidth / 2)) * 0.04;
             if (Math.random() < 0.02) aiPaddleX += (Math.random() - 0.5) * 20;
             aiPaddleX = Math.max(0, Math.min(canvas.width - paddleWidth, aiPaddleX));
