@@ -3,7 +3,7 @@
 <head>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M13,9a1,1,0,0,0-1-1H3A1,1,0,0,0,2,9V22H13ZM6,20H4V18H6Zm0-4H4V14H6Zm0-4H4V10H6Zm5,8H8V18h3Zm0-4H8V14h3Zm0-4H8V10h3Zm3.5-6H6V3A1,1,0,0,1,7,2H17a1,1,0,0,1,1,1v7H15V6.5A.5.5,0,0,0,14.5,6ZM22,13v9H19.5V18h-2v4H15V13a1,1,0,0,1,1-1h5A1,1,0,0,1,22,13Z'/%3E%3C/svg%3E"/>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SCience</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;500;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0"></script>
@@ -336,8 +336,7 @@ model-viewer {
         }
 .chat-toggle-button,
 .contact-toggle-button {
-    right: auto;
-    left: calc(100% - 70px - 20px); /* 70px button width + 20px spacing */
+    right: 20px;
     width: 70px;
     height: 70px;
     position: fixed;
@@ -355,6 +354,21 @@ model-viewer {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     outline: none;
+     padding: 15px;
+    margin: 0;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Add this new rule for better touch area */
+.chat-toggle-button::after,
+.contact-toggle-button::after {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
 }
 .chat-toggle-button:hover,
 .contact-toggle-button:hover {
@@ -985,17 +999,34 @@ const canvas = document.getElementById('gameCanvas'), ctx = canvas.getContext('2
     function resizeCanvas() { canvas.width = screenDiv.clientWidth; canvas.height = screenDiv.clientHeight; resetBall(); draw(); }
     resizeCanvas(); window.addEventListener('resize', resizeCanvas);
     autoStartTimeout = setTimeout(() => { if (!gameRunning && !gameEnded) toggleGame(); }, 5000);
-  document.querySelectorAll('.chat-toggle-button, .contact-toggle-button').forEach(btn => {
-btn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    btn.style.transform = 'scale(0.95)';
-    btn.style.opacity = '0.8';
-});
-
-btn.addEventListener('touchend', () => {
-    btn.style.transform = 'scale(1)';
-    btn.style.opacity = '1';
-});
+// Replace the previous touch event code with this:
+document.querySelectorAll('.chat-toggle-button, .contact-toggle-button').forEach(btn => {
+    // Add pointer event for better touch support
+    btn.style.touchAction = 'manipulation';
+    
+    // Improved touch start handler
+    btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        btn.style.transform = 'scale(0.95)';
+        btn.style.opacity = '0.9';
+    }, { passive: false });
+    
+    // Improved touch end handler
+    btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        btn.style.transform = 'scale(1)';
+        btn.style.opacity = '1';
+        // Trigger click event
+        btn.click();
+    }, { passive: false });
+    
+    // Add click handler for fallback
+    btn.addEventListener('click', (e) => {
+        if (!btn.disabled) {
+            // Your existing button click logic here
+            toggleChat(); // or whatever function you're using
+        }
+    });
 });
 </script>
 </body>
