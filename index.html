@@ -986,16 +986,16 @@ const canvas = document.getElementById('gameCanvas'), ctx = canvas.getContext('2
     resizeCanvas(); window.addEventListener('resize', resizeCanvas);
     autoStartTimeout = setTimeout(() => { if (!gameRunning && !gameEnded) toggleGame(); }, 5000);
   document.querySelectorAll('.chat-toggle-button, .contact-toggle-button').forEach(btn => {
-    btn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        // Add visual feedback if needed
-        btn.style.transform = 'scale(0.95)';
-    });
-    
-    btn.addEventListener('touchend', () => {
-        // Remove visual feedback
-        btn.style.transform = 'scale(1)';
-    });
+btn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    btn.style.transform = 'scale(0.95)';
+    btn.style.opacity = '0.8';
+});
+
+btn.addEventListener('touchend', () => {
+    btn.style.transform = 'scale(1)';
+    btn.style.opacity = '1';
+});
 });
 </script>
 </body>
