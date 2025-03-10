@@ -115,14 +115,14 @@
         top: 100%;
         left: 40%;
         width: 20%;
-        height: 20%; /* Adjusted height */
+        height: 20%; 
         background: linear-gradient(#666, #444);
         border-radius: 2px 2px 0 0;
         box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(255,255,255,0.1);
     }
     .base {
         position: absolute;
-        top: 120%; /* Adjusted position */
+        top: 120%; 
         left: 15%;
         width: 70%;
         height: 4%;
@@ -132,11 +132,11 @@
     }
     .keyboard {
         position: absolute;
-        top: 140px; /* Adjusted position */
+        top: 140px; 
         left: 50%;
         transform: translateX(-50%) perspective(200px) rotateX(40deg) skewX(0deg);
-        width: 140px; /* Adjusted to fit container */
-        height: 40px; /* Adjusted to fit container */
+        width: 140px; 
+        height: 40px; 
         background: linear-gradient(#444 60%, #333 100%);
         border-radius: 4px 4px 6px 6px;
         box-shadow: 0 3px 0 #000;
@@ -153,20 +153,20 @@
     }
     .buttons {
         position: absolute;
-        top: 8px; /* Adjusted position */
+        top: 8px; 
         left: 50%;
         transform: translate(-50%,0) rotateX(0deg);
         display: flex;
         gap: 4px;
     }
     .button {
-        width: 30px; /* Adjusted size */
-        height: 24px; /* Adjusted size */
+        width: 30px; 
+        height: 24px; 
         background: linear-gradient(#555 10%, #444 90%);
         border-radius: 6px;
         box-shadow: 0 1px 1px #000;
         cursor: pointer;
-        position: relative; /* Added for proper label positioning */
+        position: relative; 
     }
     .button::after {
         content: attr(data-label);
@@ -175,9 +175,9 @@
         left: 50%;
         transform: translate(-50%, -50%);
         color: #fff;
-        font: 12px Arial, sans-serif; /* Adjusted font size */
+        font: 12px Arial, sans-serif; 
         text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        white-space: nowrap; /* Ensures text stays on one line */
+        white-space: nowrap; 
     }
 @media (hover: hover) {
     .audio-trigger:hover {
@@ -359,8 +359,6 @@ model-viewer {
     -webkit-user-select: none;
     user-select: none;
 }
-
-/* Add this new rule for better touch area */
 .chat-toggle-button::after,
 .contact-toggle-button::after {
     content: '';
@@ -494,7 +492,7 @@ model-viewer {
     }
     .chat-toggle-button,
     .contact-toggle-button {
-        left: calc(100% - 60px - 20px); /* 60px button width + 20px spacing */
+        left: calc(100% - 60px - 20px); 
         width: 60px;
         height: 60px;
         bottom: 20px;
@@ -999,32 +997,22 @@ const canvas = document.getElementById('gameCanvas'), ctx = canvas.getContext('2
     function resizeCanvas() { canvas.width = screenDiv.clientWidth; canvas.height = screenDiv.clientHeight; resetBall(); draw(); }
     resizeCanvas(); window.addEventListener('resize', resizeCanvas);
     autoStartTimeout = setTimeout(() => { if (!gameRunning && !gameEnded) toggleGame(); }, 5000);
-// Replace the previous touch event code with this:
 document.querySelectorAll('.chat-toggle-button, .contact-toggle-button').forEach(btn => {
-    // Add pointer event for better touch support
     btn.style.touchAction = 'manipulation';
-    
-    // Improved touch start handler
     btn.addEventListener('touchstart', (e) => {
         e.preventDefault();
         btn.style.transform = 'scale(0.95)';
         btn.style.opacity = '0.9';
     }, { passive: false });
-    
-    // Improved touch end handler
     btn.addEventListener('touchend', (e) => {
         e.preventDefault();
         btn.style.transform = 'scale(1)';
         btn.style.opacity = '1';
-        // Trigger click event
         btn.click();
     }, { passive: false });
-    
-    // Add click handler for fallback
     btn.addEventListener('click', (e) => {
         if (!btn.disabled) {
-            // Your existing button click logic here
-            toggleChat(); // or whatever function you're using
+            toggleChat(); 
         }
     });
 });
