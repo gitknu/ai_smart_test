@@ -139,18 +139,34 @@ const flipBook = (elBook) => {
   elBook.style.setProperty("--c", 0);
   const pages = elBook.querySelectorAll(".page");
   const maxC = pages.length;
-  const runAutoFlipOnce = async () => {
-    await new Promise(resolve => setTimeout(resolve, 5000));
-    for (let c = 0; c <= maxC; c++) {
-      elBook.style.setProperty("--c", c);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-    for (let c = maxC; c >= 0; c--) {
-      elBook.style.setProperty("--c", c);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
+  let autoFlipEnabled = true;
+  let autoFlipTimeout;
+  let userReachedMaxC = false;
+  let abortController = new AbortController();
+  const runAutoFlipSequence = async () => {
+    if (!autoFlipEnabled) return;
+    const signal = abortController.signal;
+    try {
+      if (!autoFlipTimeout) await new Promise(resolve => setTimeout(resolve, 5000));
+      for (let c = 0; c <= maxC; c++) {
+        if (signal.aborted) throw new Error('Aborted');
+        elBook.style.setProperty("--c", c);
+        await new Promise(resolve => {
+          const timeoutId = setTimeout(resolve, 3000);
+          signal.addEventListener('abort', () => clearTimeout(timeoutId));
+        });
+      }
+      for (let c = maxC; c >= 0; c--) {
+        if (signal.aborted) throw new Error('Aborted');
+        elBook.style.setProperty("--c", c);
+        await new Promise(resolve => {
+          const timeoutId = setTimeout(resolve, 3000);
+          signal.addEventListener('abort', () => clearTimeout(timeoutId));
+        });
+      }
+    } catch (err) {}
   };
-  runAutoFlipOnce();
+  autoFlipTimeout = setTimeout(runAutoFlipSequence, 5000);
   pages.forEach((page, idx) => {
     page.style.setProperty("--i", idx);
     let timeoutId, intervalId;
@@ -161,6 +177,14 @@ const flipBook = (elBook) => {
       let curr = parseInt(elBook.style.getPropertyValue("--c")) || 0;
       let newCurr = Math.max(0, Math.min(curr + delta, maxC));
       elBook.style.setProperty("--c", newCurr);
+      if (newCurr === maxC) userReachedMaxC = true;
+      if (newCurr === 0 && userReachedMaxC) autoFlipEnabled = false;
+      abortController.abort();
+      abortController = new AbortController();
+      clearTimeout(autoFlipTimeout);
+      if (autoFlipEnabled) {
+        autoFlipTimeout = setTimeout(runAutoFlipSequence, 10000);
+      }
       timeoutId = setTimeout(() => {
         intervalId = setInterval(() => {
           curr = parseInt(elBook.style.getPropertyValue("--c")) || 0;
