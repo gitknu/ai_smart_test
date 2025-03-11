@@ -163,13 +163,36 @@
 <script>
 const flipBook = (elBook) => {
   elBook.style.setProperty("--c", 0);
-  elBook.querySelectorAll(".page").forEach((page, idx) => {
+  const pages = elBook.querySelectorAll(".page");
+  const maxC = pages.length;
+  pages.forEach((page, idx) => {
     page.style.setProperty("--i", idx);
-    page.addEventListener("click", (evt) => {
+    let timeoutId, intervalId;
+    const handleMouseDown = (evt) => {
       if (evt.target.closest("a")) return;
-      const curr = evt.target.closest(".back") ? idx : idx + 1;
-      elBook.style.setProperty("--c", curr);
-    });
+      const isBack = evt.target.closest(".back");
+      const delta = isBack ? -1 : 1;
+      let curr = parseInt(elBook.style.getPropertyValue("--c")) || 0;
+      let newCurr = Math.max(0, Math.min(curr + delta, maxC));
+      elBook.style.setProperty("--c", newCurr);
+      timeoutId = setTimeout(() => {
+        intervalId = setInterval(() => {
+          curr = parseInt(elBook.style.getPropertyValue("--c")) || 0;
+          newCurr = Math.max(0, Math.min(curr + delta, maxC));
+          if (newCurr !== curr) elBook.style.setProperty("--c", newCurr);
+          else clearInterval(intervalId);
+        }, 100);
+      }, 500);
+      const stop = () => {
+        clearTimeout(timeoutId);
+        clearInterval(intervalId);
+        page.removeEventListener("mouseup", stop);
+        page.removeEventListener("mouseleave", stop);
+      };
+      page.addEventListener("mouseup", stop);
+      page.addEventListener("mouseleave", stop);
+    };
+    page.addEventListener("mousedown", handleMouseDown);
   });
 };
 document.querySelectorAll(".book").forEach(flipBook);
