@@ -128,7 +128,7 @@ const flipBook = (elBook) => {
         if (signal.aborted) throw new Error('Aborted');
         elBook.style.setProperty("--c", c);
         await new Promise(resolve => {
-          const timeoutId = setTimeout(resolve, 3000);
+          const timeoutId = setTimeout(resolve, 500);
           signal.addEventListener('abort', () => clearTimeout(timeoutId));
         });
       }
