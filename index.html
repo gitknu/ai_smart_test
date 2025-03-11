@@ -11,14 +11,16 @@
 .book {
   position: relative;
   display: flex;
-  width: 300px; /* 50% of computer's 200px width */
-  height: 200px; /* 100% of computer's height */
+  width: 300px;
+  height: 200px;
   pointer-events: none;
   transform-style: preserve-3d;
   transition: translate 1s;
-  translate: calc(min(var(--c), 1) * 50%) 0%;
+  translate: 0 0;
   rotate: 1 0 0 30deg;
   color: hsl(180 68% 5%);
+  left: 100%;
+  transform: translateX(-50%);
 }
 .page {
   --thickness: 4;
