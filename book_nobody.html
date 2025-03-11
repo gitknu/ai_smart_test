@@ -11,13 +11,6 @@
       <p></p>
     </div>
     <div class="back">
-    </div>
-  </div>
-  <div class="page">
-    <div class="front">
-      <p></p>
-    </div>
-    <div class="back">
       <p></p>
     </div>
   </div>
@@ -42,12 +35,10 @@
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  perspective: 1000px;
 }
 .book {
   position: relative;
   display: flex;
-  margin: auto;
   width: 40cqmin;
   pointer-events: none;
   transform-style: preserve-3d;
@@ -80,7 +71,7 @@
   width: 100%;
   backface-visibility: hidden;
   overflow: hidden;
-  background-color: #fff;
+  background-color: #ebeced;
   translate: 0px;
 }
 .back {
@@ -100,7 +91,6 @@
   display: flex;
   flex-flow: column wrap;
   justify-content: space-between;
-  padding: 2em;
   border: 1px solid #0002;
   &::after {
     position: absolute;
@@ -119,14 +109,14 @@
     right: 1em;
   }
   background: linear-gradient(to left, #f7f7f7 80%, #eee 100%);
-  border-radius: .1em .5em .5em .1em;
+  border-radius: .1em .9em .9em .1em;
 }
 .back {
   &::after {
     left: 1em;
   }
   background-image: linear-gradient(to right, #f7f7f7 80%, #eee 100%);
-  border-radius: .5em .1em .1em .5em;
+  border-radius: .9em .1em .1em .9em;
 }
 .cover {
   background: radial-gradient(circle farthest-corner at 80% 20%, hsl(150 80% 20% / .3) 0%, hsl(170 60% 10% / .1) 100%),
@@ -170,7 +160,14 @@ const flipBook = (elBook) => {
   pages.forEach((page, idx) => {
     page.style.setProperty("--i", idx);
     let timeoutId, intervalId;
-    const handleMouseDown = (evt) => {
+    const handleInteraction = (evt) => {
+      if (evt.type === 'touchstart') {
+        evt.preventDefault();
+        if (document.body.style.overflow !== 'hidden') {
+          document.body.style.overflow = 'hidden';
+          setTimeout(() => document.body.style.overflow = '', 1000);
+        }
+      }
       if (evt.target.closest("a")) return;
       const isBack = evt.target.closest(".back");
       const delta = isBack ? -1 : 1;
@@ -196,13 +193,24 @@ const flipBook = (elBook) => {
       const stop = () => {
         clearTimeout(timeoutId);
         clearInterval(intervalId);
-        page.removeEventListener("mouseup", stop);
-        page.removeEventListener("mouseleave", stop);
+        if (evt.type === 'touchstart') {
+          page.removeEventListener("touchend", stop);
+          page.removeEventListener("touchcancel", stop);
+        } else {
+          page.removeEventListener("mouseup", stop);
+          page.removeEventListener("mouseleave", stop);
+        }
       };
-      page.addEventListener("mouseup", stop);
-      page.addEventListener("mouseleave", stop);
+      if (evt.type === 'touchstart') {
+        page.addEventListener("touchend", stop);
+        page.addEventListener("touchcancel", stop);
+      } else {
+        page.addEventListener("mouseup", stop);
+        page.addEventListener("mouseleave", stop);
+      }
     };
-    page.addEventListener("mousedown", handleMouseDown);
+    page.addEventListener("mousedown", handleInteraction);
+    page.addEventListener("touchstart", handleInteraction, { passive: false });
   });
 };
 document.querySelectorAll(".book").forEach(flipBook);
