@@ -8,10 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;500;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0"></script>
     <style>
-    .book {
+.book {
   position: relative;
   display: flex;
-  width: 40cqmin;
+  width: 300px; /* 50% of computer's 200px width */
+  height: 200px; /* 100% of computer's height */
   pointer-events: none;
   transform-style: preserve-3d;
   transition: translate 1s;
@@ -23,8 +24,8 @@
   --thickness: 4;
   display: flex;
   width: 100%;
-  min-height:100px;
-  max-height:500px;
+  min-height: 100%; /* Changed from 100px */
+  max-height: 100%; 
   pointer-events: all;
   transform-style: preserve-3d;
   transform-origin: left center;
@@ -32,7 +33,7 @@
     transform 1s,
     rotate 1s ease-in calc((min(var(--i), var(--c)) - max(var(--i), var(--c))) * 50ms);
   translate: calc(var(--i) * -100%) 0px 0px;
-  transform: translateZ( calc((var(--c) - var(--i) - 0.5) * calc(var(--thickness) * .23cqmin)));
+  transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 0.92px));
   rotate: 0 1 0 calc(clamp(0, var(--c) - var(--i), 1) * -180deg);
 }
 .front,.back {
