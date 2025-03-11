@@ -720,10 +720,26 @@ function isMobile() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 document.querySelectorAll('.audio-trigger').forEach(span => {
-    if (isMobile()) return; // Skip mobile devices
-    const link = span.closest('a[href^="https://youtu.be/"]');
+    if (isMobile()) return;
+    const link = span.closest('a');
     if (!link) return;
-    span.style.cursor = 'pointer';
+    if (link.href.includes('PC4GsyAJIV4')) { 
+        const audio = new Audio('https://gitknu.github.io/ai_smart_test/katerynych.mp3'); 
+        let isPlaying = false;
+        span.addEventListener('mouseenter', function() {
+            if (isPlaying) return;
+            audio.currentTime = parseInt(link.dataset.start);
+            audio.play();
+            isPlaying = true;
+        });
+        span.addEventListener('mouseleave', function() {
+            audio.pause();
+            audio.currentTime = parseInt(link.dataset.start);
+            isPlaying = false;
+        });
+    }
+    else if (link.href.startsWith('https://youtu.be/')) {
+        span.style.cursor = 'pointer';
     span.addEventListener('mouseenter', function() {
         const url = new URL(link.href);
         currentVideoId = url.pathname.split('/').pop();
