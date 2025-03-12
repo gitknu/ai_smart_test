@@ -1,5 +1,11 @@
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport meta -->
-    <style>
+    <div class="container">
+        <div class="vertical-stick">
+            <div class="horizontal-stick"></div>
+            <div class="base"></div>
+        </div>
+    </div>
+    <canvas id="ropeCanvas"></canvas>
+<style>
         .container {
             position: absolute;
             top: 50%;
@@ -42,15 +48,6 @@
             left: 0;
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="vertical-stick">
-            <div class="horizontal-stick"></div>
-            <div class="base"></div>
-        </div>
-    </div>
-    <canvas id="ropeCanvas"></canvas>
     <script>
         const horizontalStick = document.querySelector('.horizontal-stick');
         let isDragging = false;
@@ -203,5 +200,3 @@
         }
         requestAnimationFrame(animate);
     </script>
-</body>
-</html>
