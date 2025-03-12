@@ -12,37 +12,30 @@
             height: 200px;
             background: #666;
             position: relative;
-            border-radius: 5px;
         }
         .horizontal-stick {
-            width: 350px;
+            width: 200px;
             height: 20px;
-            background: #444;
-            position: absolute;
             top: -10px;
-            left: 50%;
             transform: translateX(-50%) rotate(0deg);
             transform-origin: bottom center;
-            border-radius: 5px;
             cursor: grab;
             transition: transform 0.3s ease;
         }
         .horizontal-stick:active {
             cursor: grabbing;
         }
+        .horizontal-stick, .base {
+            position: absolute;
+            left: 50%;
+            background: #444;
+            border-radius: 5px;
+        }
         .base {
             width: 100px;
             height: 20px;
-            background: #333;
-            position: absolute;
             bottom: 0;
-            left: 50%;
             transform: translateX(-50%);
-            border-radius: 5px;
-        }
-        body {
-            overflow: hidden;
-            user-select: none;
         }
     </style>
 </head>
@@ -56,19 +49,19 @@
     <script>
         const horizontalStick = document.querySelector('.horizontal-stick');
         let isDragging = false;
-        let startX;
+        let startY;
         let currentAngle = 0;
         horizontalStick.addEventListener('mousedown', (e) => {
             isDragging = true;
-            startX = e.clientX;
+            startY = e.clientY;
             horizontalStick.style.transition = 'none';
         });
         document.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
             const rect = horizontalStick.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const deltaX = e.clientX - centerX;
-            currentAngle = Math.min(Math.max(deltaX * 0.2, -30), 30);
+            const centerY = rect.top + rect.height / 2;
+            const deltaY = e.clientY - centerY;
+            currentAngle = Math.min(Math.max(-deltaY * 0.2, -30), 30); 
             horizontalStick.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
         });
         document.addEventListener('mouseup', () => {
