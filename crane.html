@@ -1,0 +1,90 @@
+<html>
+<head>
+    <style>
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .vertical-stick {
+            width: 20px;
+            height: 200px;
+            background: #666;
+            position: relative;
+            border-radius: 5px;
+        }
+        .horizontal-stick {
+            width: 350px;
+            height: 20px;
+            background: #444;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%) rotate(0deg);
+            transform-origin: bottom center;
+            border-radius: 5px;
+            cursor: grab;
+            transition: transform 0.3s ease;
+        }
+        .horizontal-stick:active {
+            cursor: grabbing;
+        }
+        .base {
+            width: 100px;
+            height: 20px;
+            background: #333;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+        body {
+            overflow: hidden;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="vertical-stick">
+            <div class="horizontal-stick"></div>
+            <div class="base"></div>
+        </div>
+    </div>
+    <script>
+        const horizontalStick = document.querySelector('.horizontal-stick');
+        let isDragging = false;
+        let startX;
+        let currentAngle = 0;
+        horizontalStick.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            horizontalStick.style.transition = 'none';
+        });
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const rect = horizontalStick.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const deltaX = e.clientX - centerX;
+            currentAngle = Math.min(Math.max(deltaX * 0.2, -30), 30);
+            horizontalStick.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
+        });
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                horizontalStick.style.transition = 'transform 0.5s ease';
+                horizontalStick.style.transform = 'translateX(-50%) rotate(0deg)';
+            }
+        });
+        document.addEventListener('mouseleave', () => {
+            if (isDragging) {
+                isDragging = false;
+                horizontalStick.style.transition = 'transform 0.5s ease';
+                horizontalStick.style.transform = 'translateX(-50%) rotate(0deg)';
+            }
+        });
+    </script>
+</body>
+</html>
