@@ -1,0 +1,207 @@
+<div class="container">
+    <div class="vertical-stick">
+        <div class="horizontal-stick"></div>
+        <div class="base"></div>
+    </div>
+</div>
+<canvas id="ropeCanvas"></canvas>
+<style>
+    .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+    }
+    .vertical-stick {
+        width: 20px;
+        height: 200px;
+        background: #666;
+    }
+    .horizontal-stick {
+        width: 300px;
+        height: 20px;
+        top: -10px;
+        transform: translateX(-50%) rotate(0deg);
+        cursor: grab;
+        transition: transform 0.5s ease;
+    }
+    .horizontal-stick:active {
+        cursor: grabbing;
+        transition: none;
+    }
+    .horizontal-stick, .base {
+        position: absolute;
+        left: 50%;
+        background: #444;
+        border-radius: 5px;
+    }
+    .base {
+        width: 100px;
+        height: 40px;
+        bottom: 0;
+        transform: translateX(-50%);
+    }
+    #ropeCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+</style>
+<script>
+    const horizontalStick = document.querySelector('.horizontal-stick');
+    let isDragging = false;
+    let startY;
+    let direction = 1;
+    function handleStart(e) {
+        e.preventDefault();
+        isDragging = true;
+        const clientY = e.clientY || e.touches[0].clientY;
+        const clientX = e.clientX || e.touches[0].clientX;
+        startY = clientY;
+        const rect = horizontalStick.getBoundingClientRect();
+        const clickX = clientX - rect.left;
+        direction = clickX < rect.width/2 ? -1 : 1;
+        horizontalStick.style.transition = 'none';
+    }
+    function handleMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const clientY = e.clientY || e.touches[0].clientY;
+        const deltaY = (clientY - startY) * direction;
+        const angle = Math.min(Math.max(deltaY * 0.2, -30), 30);
+        horizontalStick.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+    }
+    function handleEnd() {
+        if (isDragging) {
+            isDragging = false;
+            horizontalStick.style.transition = 'transform 0.5s ease';
+            horizontalStick.style.transform = 'translateX(-50%) rotate(0deg)';
+        }
+    }
+    horizontalStick.addEventListener('mousedown', handleStart);
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('mouseleave', handleEnd);
+    horizontalStick.addEventListener('touchstart', handleStart, { passive: false });
+    document.addEventListener('touchmove', handleMove, { passive: false });
+    document.addEventListener('touchend', handleEnd);
+    const canvas = document.getElementById('ropeCanvas');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    class Point {
+        constructor(x, y, isFixed = false) {
+            this.x = x;
+            this.y = y;
+            this.oldY = y;
+            this.isFixed = isFixed;
+        }
+        update(dt) {
+            if (this.isFixed) return;
+            const vy = (this.y - this.oldY) * 0.95;
+            this.oldY = this.y;
+            this.y += vy + 0.05 * dt * dt;
+        }
+        constrain() {
+            if (this.y > canvas.height) {
+                this.y = canvas.height;
+            }
+        }
+    }
+    class Rope {
+        constructor(startX, startY, segments, ropeLength) {
+            this.points = [];
+            const segmentLength = ropeLength / segments;
+            for (let i = 0; i < segments; i++) {
+                this.points.push(new Point(startX, startY + i * segmentLength, i === 0));
+            }
+            this.segmentLength = segmentLength;
+        }
+        update(dt) {
+            for (let i = 0; i < this.points.length; i++) {
+                this.points[i].update(dt);
+            }
+            for (let i = 0; i < 3; i++) {
+                this.applyConstraints();
+            }
+        }
+        applyConstraints() {
+            for (let i = 0; i < this.points.length - 1; i++) {
+                const p1 = this.points[i];
+                const p2 = this.points[i + 1];
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const difference = this.segmentLength - distance;
+                const percent = difference / distance / 2;
+                const offsetX = dx * percent;
+                const offsetY = dy * percent;
+                if (!p1.isFixed) {
+                    p1.x -= offsetX;
+                    p1.y -= offsetY;
+                }
+                if (!p2.isFixed) {
+                    p2.x += offsetX;
+                    p2.y += offsetY;
+                }
+            }
+            for (const point of this.points) {
+                point.constrain();
+            }
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.moveTo(this.points[0].x, this.points[0].y);
+            for (let i = 1; i < this.points.length; i++) {
+                ctx.lineTo(this.points[i].x, this.points[i].y);
+            }
+            ctx.stroke();
+        }
+    }
+    let rope;
+    function initRope() {
+        const startX = window.innerWidth/2 + 150;
+        const startY = window.innerHeight/2 - 200;
+        rope = new Rope(startX, startY, 5, 100);
+    }
+    initRope();
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        initRope();
+    });
+    function getCurrentAngle() {
+        const style = getComputedStyle(horizontalStick);
+        const matrix = new DOMMatrix(style.transform);
+        return Math.atan2(matrix.b, matrix.a) * (180/Math.PI);
+    }
+    let lastTime = 0;
+    function animate(timestamp) {
+        const dt = timestamp - lastTime;
+        lastTime = timestamp;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const currentAngle = getCurrentAngle();
+        const pivotX = window.innerWidth/2;
+        const pivotY = window.innerHeight/2 - 100;
+        const angleRad = currentAngle * Math.PI / 180;
+        const endX = pivotX + 150 * Math.cos(angleRad);
+        const endY = pivotY + 150 * Math.sin(angleRad);
+        if (rope.points[0]) {
+            rope.points[0].x = endX;
+            rope.points[0].y = endY;
+            rope.update(dt);
+            rope.draw();
+            const lastPoint = rope.points[rope.points.length - 1];
+            ctx.beginPath();
+            ctx.arc(lastPoint.x, lastPoint.y, 20, 0, Math.PI * 2);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+        }
+        requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+</script>
