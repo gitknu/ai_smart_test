@@ -51,17 +51,19 @@
         let isDragging = false;
         let startY;
         let currentAngle = 0;
+        let direction = 1;
         horizontalStick.addEventListener('mousedown', (e) => {
             isDragging = true;
             startY = e.clientY;
+            const rect = horizontalStick.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            direction = clickX < rect.width/2 ? -1 : 1;
             horizontalStick.style.transition = 'none';
         });
         document.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
-            const rect = horizontalStick.getBoundingClientRect();
-            const centerY = rect.top + rect.height / 2;
-            const deltaY = e.clientY - centerY;
-            currentAngle = Math.min(Math.max(-deltaY * 0.2, -30), 30); 
+            const deltaY = (e.clientY - startY) * direction;
+            currentAngle = Math.min(Math.max(deltaY * 0.2, -30), 30);
             horizontalStick.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
         });
         document.addEventListener('mouseup', () => {
