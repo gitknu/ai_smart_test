@@ -1,10 +1,4 @@
-    <div class="container">
-        <div class="vertical-stick">
-            <div class="horizontal-stick"></div>
-            <div class="base"></div>
-        </div>
-    </div>
-    <canvas id="ropeCanvas"></canvas>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport meta -->
     <style>
         .container {
             position: absolute;
@@ -46,9 +40,17 @@
             position: fixed;
             top: 0;
             left: 0;
-            z-index: 0;
         }
     </style>
+</head>
+<body>
+    <div class="container">
+        <div class="vertical-stick">
+            <div class="horizontal-stick"></div>
+            <div class="base"></div>
+        </div>
+    </div>
+    <canvas id="ropeCanvas"></canvas>
     <script>
         const horizontalStick = document.querySelector('.horizontal-stick');
         let isDragging = false;
@@ -89,8 +91,12 @@
         document.addEventListener('touchend', handleEnd);
         const canvas = document.getElementById('ropeCanvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
         class Point {
             constructor(x, y, isFixed = false) {
                 this.x = x;
@@ -161,7 +167,17 @@
                 ctx.stroke();
             }
         }
-        const rope = new Rope(window.innerWidth/2 + 150, window.innerHeight/2 - 200, 5, 200);
+        let rope;
+        function initRope() {
+            const startX = window.innerWidth/2 + 150;
+            const startY = window.innerHeight/2 - 200;
+            rope = new Rope(startX, startY, 5, 200);
+        }
+        initRope();
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initRope();
+        });
         function getCurrentAngle() {
             const style = getComputedStyle(horizontalStick);
             const matrix = new DOMMatrix(style.transform);
@@ -178,11 +194,15 @@
             const angleRad = currentAngle * Math.PI / 180;
             const endX = pivotX + 150 * Math.cos(angleRad);
             const endY = pivotY + 150 * Math.sin(angleRad);
-            rope.points[0].x = endX;
-            rope.points[0].y = endY;
-            rope.update(dt);
-            rope.draw();
+            if (rope.points[0]) {
+                rope.points[0].x = endX;
+                rope.points[0].y = endY;
+                rope.update(dt);
+                rope.draw();
+            }
             requestAnimationFrame(animate);
         }
         requestAnimationFrame(animate);
     </script>
+</body>
+</html>
