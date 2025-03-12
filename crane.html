@@ -1,5 +1,3 @@
-<html>
-<head>
     <style>
         .container {
             position: absolute;
@@ -14,7 +12,7 @@
             position: relative;
         }
         .horizontal-stick {
-            width: 200px;
+            width: 300px;
             height: 20px;
             top: -10px;
             transform: translateX(-50%) rotate(0deg);
@@ -38,8 +36,6 @@
             transform: translateX(-50%);
         }
     </style>
-</head>
-<body>
     <div class="container">
         <div class="vertical-stick">
             <div class="horizontal-stick"></div>
@@ -52,34 +48,37 @@
         let startY;
         let currentAngle = 0;
         let direction = 1;
-        horizontalStick.addEventListener('mousedown', (e) => {
+        function handleStart(e) {
+            e.preventDefault();
             isDragging = true;
-            startY = e.clientY;
+            const clientY = e.clientY || e.touches[0].clientY;
+            const clientX = e.clientX || e.touches[0].clientX;
+            startY = clientY;
             const rect = horizontalStick.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
+            const clickX = clientX - rect.left;
             direction = clickX < rect.width/2 ? -1 : 1;
             horizontalStick.style.transition = 'none';
-        });
-        document.addEventListener('mousemove', (e) => {
+        }
+        function handleMove(e) {
             if (!isDragging) return;
-            const deltaY = (e.clientY - startY) * direction;
+            e.preventDefault();
+            const clientY = e.clientY || e.touches[0].clientY;
+            const deltaY = (clientY - startY) * direction;
             currentAngle = Math.min(Math.max(deltaY * 0.2, -30), 30);
             horizontalStick.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
-        });
-        document.addEventListener('mouseup', () => {
+        }
+        function handleEnd() {
             if (isDragging) {
                 isDragging = false;
                 horizontalStick.style.transition = 'transform 0.5s ease';
                 horizontalStick.style.transform = 'translateX(-50%) rotate(0deg)';
             }
-        });
-        document.addEventListener('mouseleave', () => {
-            if (isDragging) {
-                isDragging = false;
-                horizontalStick.style.transition = 'transform 0.5s ease';
-                horizontalStick.style.transform = 'translateX(-50%) rotate(0deg)';
-            }
-        });
+        }
+        horizontalStick.addEventListener('mousedown', handleStart);
+        document.addEventListener('mousemove', handleMove);
+        document.addEventListener('mouseup', handleEnd);
+        document.addEventListener('mouseleave', handleEnd);
+        horizontalStick.addEventListener('touchstart', handleStart, { passive: false });
+        document.addEventListener('touchmove', handleMove, { passive: false });
+        document.addEventListener('touchend', handleEnd);
     </script>
-</body>
-</html>
