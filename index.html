@@ -19,7 +19,8 @@
     left: 50%;
     transform: translateX(-50%);
     width: 20px;
-    height: 200px;
+    height: 150px;
+    top:50px;
     background: #666;
 }
 
@@ -56,7 +57,8 @@
     position: absolute;
     left: 0;
     width: 100%;
-    height: 100%;
+    top:50px;
+    height: 75%;
     pointer-events: none;
 }
 .book {
@@ -947,20 +949,17 @@ const flipBook=(a)=>{a.style.setProperty("--c",0);const t=a.querySelectorAll(".p
     let startY = 0;
     let direction = 1;
     let rope = null;
-    // Initialize crane dimensions
     const craneDimensions = {
         verticalHeight: 0,
         horizontalWidth: 190,
         baseWidth: 100
     };
-    // Resize handler
     function resize() {
         const rect = container.getBoundingClientRect();
         canvas.width = rect.width;
         canvas.height = rect.height;
         initRope();
     }
-    // Rope physics
     class Point {
         constructor(x, y, isFixed = false) {
             this.x = x;
@@ -1021,7 +1020,6 @@ const flipBook=(a)=>{a.style.setProperty("--c",0);const t=a.querySelectorAll(".p
         const pivotY = craneDimensions.verticalHeight / 2;
         rope = new Rope(pivotX + craneDimensions.horizontalWidth / 2, pivotY);
     }
-    // Animation loop
     function animate(timestamp) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const rect = container.getBoundingClientRect();
@@ -1044,7 +1042,6 @@ const flipBook=(a)=>{a.style.setProperty("--c",0);const t=a.querySelectorAll(".p
         }
         requestAnimationFrame(animate);
     }
-    // Event handlers
     function handleStart(e) {
         isDragging = true;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -1057,15 +1054,14 @@ const flipBook=(a)=>{a.style.setProperty("--c",0);const t=a.querySelectorAll(".p
     function handleMove(e) {
         if (!isDragging) return;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        const angle = Math.min(Math.max((clientY - startY) * direction * 0.2, -30), 30);
+        const angle = Math.min(Math.max((clientY - startY) * direction * 0.2, -5), 15);
         horizontalStick.style.transform = `translateX(-50%) rotate(${angle}deg)`;
     }
     function handleEnd() {
         isDragging = false;
         horizontalStick.style.transition = 'transform 0.5s ease';
-        horizontalStick.style.transform = 'translateX(-50%) rotate(0deg)';
+        horizontalStick.style.transform = 'translateX(-50%) rotate(15deg)';
     }
-    // Initialize
     new ResizeObserver(resize).observe(container);
     horizontalStick.addEventListener('mousedown', handleStart);
     horizontalStick.addEventListener('touchstart', handleStart, { passive: false });
