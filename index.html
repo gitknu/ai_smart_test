@@ -938,6 +938,7 @@ const flipBook=(a)=>{a.style.setProperty("--c",0);const t=a.querySelectorAll(".p
 //BOOK END
 //CRANE START
 (document => {
+    let autoToggleCount = 0; 
     const container = document.querySelector('.crane-container');
     const horizontalStick = container.querySelector('.horizontal-stick');
     const canvas = container.querySelector('.rope-canvas');
@@ -1023,11 +1024,15 @@ const autoAngle = -5;
         rope = new Rope(pivotX + craneDimensions.horizontalWidth / 2, pivotY);
     }
     function toggleAutoAngle() {
-    const currentAngle = parseFloat(horizontalStick.style.transform.match(/rotate\(([-\d.]+)deg\)/)[1]);
-    const targetAngle = currentAngle === initialAngle ? autoAngle : initialAngle;
-    horizontalStick.style.transition = 'transform 2s ease';
-    horizontalStick.style.transform = `translateX(-50%) rotate(${targetAngle}deg)`;
-}
+        const currentAngle = parseFloat(horizontalStick.style.transform.match(/rotate\(([-\d.]+)deg\)/)[1]);
+        const targetAngle = currentAngle === initialAngle ? autoAngle : initialAngle;
+        horizontalStick.style.transition = 'transform 2s ease';
+        horizontalStick.style.transform = `translateX(-50%) rotate(${targetAngle}deg)`;
+        autoToggleCount++; // Increment counter
+        if (autoToggleCount >= 2) { // Stop after 2 movements
+            clearInterval(autoInterval);
+        }
+    }
     function animate(timestamp) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const rect = container.getBoundingClientRect();
@@ -1066,17 +1071,19 @@ function handleStart(e) {
         const angle = Math.min(Math.max((clientY - startY) * direction * 0.2, -5), 15);
         horizontalStick.style.transform = `translateX(-50%) rotate(${angle}deg)`;
     }
-function handleEnd() {
-    isDragging = false;
-    horizontalStick.style.transition = 'transform 0.5s ease';
-    horizontalStick.style.transform = 'translateX(-50%) rotate(15deg)';
-    autoTimeout = setTimeout(() => {
-        autoInterval = setInterval(toggleAutoAngle, 10000);
-    }, 20000);
-}
+    function handleEnd() {
+        isDragging = false;
+        horizontalStick.style.transition = 'transform 0.5s ease';
+        horizontalStick.style.transform = 'translateX(-50%) rotate(15deg)'; 
+        autoTimeout = setTimeout(() => {
+            autoToggleCount = 0; // Reset counter
+            autoInterval = setInterval(toggleAutoAngle, 10000);
+        }, 20000);
+    }
     new ResizeObserver(resize).observe(container);
-horizontalStick.style.transform = 'translateX(-50%) rotate(15deg)';
-autoInterval = setInterval(toggleAutoAngle, 10000);
+    autoToggleCount = 0;
+    horizontalStick.style.transform = 'translateX(-50%) rotate(15deg)';
+    autoInterval = setInterval(toggleAutoAngle, 10000);
     horizontalStick.addEventListener('mousedown', handleStart);
     horizontalStick.addEventListener('touchstart', handleStart, { passive: false });
     document.addEventListener('mousemove', handleMove);
