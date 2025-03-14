@@ -946,6 +946,10 @@ const flipBook=(a)=>{a.style.setProperty("--c",0);const t=a.querySelectorAll(".p
     let startY = 0;
     let direction = 1;
     let rope = null;
+    let autoInterval;
+let autoTimeout;
+const initialAngle = 15;
+const autoAngle = -5;
     const craneDimensions = {
         verticalHeight: 0,
         horizontalWidth: 190,
@@ -1018,6 +1022,12 @@ const flipBook=(a)=>{a.style.setProperty("--c",0);const t=a.querySelectorAll(".p
         const pivotY = craneDimensions.verticalHeight / 2;
         rope = new Rope(pivotX + craneDimensions.horizontalWidth / 2, pivotY);
     }
+    function toggleAutoAngle() {
+    const currentAngle = parseFloat(horizontalStick.style.transform.match(/rotate\(([-\d.]+)deg\)/)[1]);
+    const targetAngle = currentAngle === initialAngle ? autoAngle : initialAngle;
+    horizontalStick.style.transition = 'transform 2s ease';
+    horizontalStick.style.transform = `translateX(-50%) rotate(${targetAngle}deg)`;
+}
     function animate(timestamp) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const rect = container.getBoundingClientRect();
@@ -1039,27 +1049,34 @@ const flipBook=(a)=>{a.style.setProperty("--c",0);const t=a.querySelectorAll(".p
         }
         requestAnimationFrame(animate);
     }
-    function handleStart(e) {
-        isDragging = true;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        startY = clientY;
-        direction = clientX < horizontalStick.getBoundingClientRect().left + 
-            horizontalStick.offsetWidth / 2 ? -1 : 1;
-        horizontalStick.style.transition = 'none';
-    }
+function handleStart(e) {
+    isDragging = true;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    startY = clientY;
+    direction = clientX < horizontalStick.getBoundingClientRect().left + 
+        horizontalStick.offsetWidth / 2 ? -1 : 1;
+    horizontalStick.style.transition = 'none';
+    clearInterval(autoInterval);
+    clearTimeout(autoTimeout);
+}
     function handleMove(e) {
         if (!isDragging) return;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
         const angle = Math.min(Math.max((clientY - startY) * direction * 0.2, -5), 15);
         horizontalStick.style.transform = `translateX(-50%) rotate(${angle}deg)`;
     }
-    function handleEnd() {
-        isDragging = false;
-        horizontalStick.style.transition = 'transform 0.5s ease';
-        horizontalStick.style.transform = 'translateX(-50%) rotate(15deg)';
-    }
+function handleEnd() {
+    isDragging = false;
+    horizontalStick.style.transition = 'transform 0.5s ease';
+    horizontalStick.style.transform = 'translateX(-50%) rotate(15deg)';
+    autoTimeout = setTimeout(() => {
+        autoInterval = setInterval(toggleAutoAngle, 10000);
+    }, 20000);
+}
     new ResizeObserver(resize).observe(container);
+horizontalStick.style.transform = 'translateX(-50%) rotate(15deg)';
+autoInterval = setInterval(toggleAutoAngle, 10000);
     horizontalStick.addEventListener('mousedown', handleStart);
     horizontalStick.addEventListener('touchstart', handleStart, { passive: false });
     document.addEventListener('mousemove', handleMove);
