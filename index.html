@@ -1011,6 +1011,7 @@ const flipBook=(a)=>{a.style.setProperty("--c",0);const t=a.querySelectorAll(".p
             ctx.beginPath();
             ctx.moveTo(this.points[0].x, this.points[0].y);
             this.points.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.strokeStyle = '#444';
             ctx.stroke();
         }
     }
@@ -1033,11 +1034,10 @@ const flipBook=(a)=>{a.style.setProperty("--c",0);const t=a.querySelectorAll(".p
             rope.points[0].y = pivotY + Math.sin(angle) * craneDimensions.horizontalWidth / 2;
             rope.update(16);
             rope.draw();
-            // Draw hook
             const lastPoint = rope.points[rope.points.length - 1];
             ctx.beginPath();
             ctx.arc(lastPoint.x, lastPoint.y, 10, 0, Math.PI * 2);
-            ctx.fillStyle = '#ff4444';
+            ctx.fillStyle = 'red';
             ctx.fill();
         }
         requestAnimationFrame(animate);
