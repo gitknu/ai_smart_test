@@ -123,63 +123,22 @@ width: 200px; height: 200px; position: relative; margin: 0 auto 20px;
         position: absolute; top: 100%; left: 40%; width: 20%; height: 20%; background: linear-gradient(#666, #444); border-radius: 2px 2px 0 0; box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(255,255,255,0.1);
     }
     .base {
-        position: absolute;
-        top: 120%; 
-        left: 15%;
-        width: 70%;
-        height: 4%;
-        background: linear-gradient(#666, #444);
-        border-radius: 2px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(255,255,255,0.1);
+        position: absolute; top: 120%; left: 15%; width: 70%; height: 4%; background: linear-gradient(#666, #444); border-radius: 2px; box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(255,255,255,0.1);
     }
     .keyboard {
-        position: absolute;
-        top: 140px; 
-        left: 50%;
-        transform: translateX(-50%) perspective(200px) rotateX(40deg) skewX(0deg);
-        width: 140px; 
-        height: 40px; 
-        background: linear-gradient(#444 60%, #333 100%);
-        border-radius: 4px 4px 6px 6px;
-        box-shadow: 0 3px 0 #000;
+position: absolute; top: 140px; left: 50%; transform: translateX(-50%) perspective(200px) rotateX(40deg) skewX(0deg); width: 140px; height: 40px; background: linear-gradient(#444 60%, #333 100%); border-radius: 4px 4px 6px 6px; box-shadow: 0 3px 0 #000;
     }
     .keyboard::before {
-        content: '';
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        right: 2px;
-        bottom: 2px;
-        background: linear-gradient(#333 40%, #222 100%);
-        border-radius: 2px 2px 3px 3px;
+        content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px; background: linear-gradient(#333 40%, #222 100%); border-radius: 2px 2px 3px 3px;
     }
     .buttons {
-        position: absolute;
-        top: 8px; 
-        left: 50%;
-        transform: translate(-50%,0) rotateX(0deg);
-        display: flex;
-        gap: 4px;
+        position: absolute; top: 8px; left: 50%; transform: translate(-50%,0) rotateX(0deg); display: flex; gap: 4px;
     }
     .button {
-        width: 30px; 
-        height: 24px; 
-        background: linear-gradient(#555 10%, #444 90%);
-        border-radius: 6px;
-        box-shadow: 0 1px 1px #000;
-        cursor: pointer;
-        position: relative; 
+        width: 30px; height: 24px; background: linear-gradient(#555 10%, #444 90%); border-radius: 6px; box-shadow: 0 1px 1px #000; cursor: pointer; position: relative; 
     }
     .button::after {
-        content: attr(data-label);
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #fff;
-        font: 12px Arial, sans-serif; 
-        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        white-space: nowrap; 
+  content: attr(data-label); position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font: 12px Arial, sans-serif; text-shadow: 0 1px 2px rgba(0,0,0,0.5); white-space: nowrap; 
     }
 @media (hover: hover) {
     .audio-trigger:hover {
@@ -187,58 +146,37 @@ width: 200px; height: 200px; position: relative; margin: 0 auto 20px;
     }
 }
         .appear, table {
-  flex-direction: column;
-  margin-inline: 1vw;
-  width: calc(100% - 2vw); 
-  margin-top:5vh;
-  margin-bottom:5vh;
+  flex-direction: column; margin-inline: 1vw; width: calc(100% - 2vw); margin-top:5vh; margin-bottom:5vh;
         }
         table {
-    border-collapse: collapse;
-    width: 100%;
+    border-collapse: collapse; width: 100%;
 }
 table td:first-child {
-    width: 30%;
-    padding: 10px;
-    overflow: hidden; 
+  width: 30%; padding: 10px; overflow: hidden; 
 }
 table td:last-child {
-    width: 70%;
-    padding: 10px;
+    width: 70%; padding: 10px;
 }
 table img {
-    width: 100%;
-    height: auto;
-    border-radius: 50%;
-    object-fit: cover;
+    width: 100%; height: auto; border-radius: 50%; object-fit: cover;
 }
         .appear:nth-child(odd) {
-  align-items: flex-start; 
-  text-align: left;
+  align-items: flex-start; text-align: left;
 }
 .appear:nth-child(even) {
-  align-items: flex-end; 
-  text-align: right;
+  align-items: flex-end; text-align: right;
 }
 .appear.centered {
-  align-items: center;
-  text-align: center;
+  align-items: center; text-align: center;
 }
 .chat-input::placeholder {
-    opacity: 1;
-    transition: opacity 0.3s ease-in-out;
+    opacity: 1; transition: opacity 0.3s ease-in-out;
 }
 .chat-input:disabled::placeholder {
     opacity: 0;
 }
 header {
-    background: grey;
-    color: white;
-    padding: 7rem 0;
-    height: 150px; 
-    display: flex;
-    align-items: center; 
-    justify-content: center; 
+    background: grey; color: white; padding: 7rem 0; height: 150px;  display: flex; align-items: center; justify-content: center; 
 }
 model-viewer {
     max-width: 200px;
